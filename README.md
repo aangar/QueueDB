@@ -1,8 +1,8 @@
-# Project: Binary Tree
-## Author: **AJ Angarita**
-### Project Description: A growing Java File for a binary tree.
+# Project: Data Structures, personal learing repo.
+### Author: **AJ Angarita**
+### Project Description: A repo where I put files to work on my understanding on data structures.
 ### Motive: Wanted to start somewhere with data structures before formal instruction.
-### Contributors: Primary, AJ Angarita. Secondary: Derek ( thanks! ).
+
 ---
 
 What has been done so far?
