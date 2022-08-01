@@ -1,16 +1,16 @@
 public class Test {
     public static void main(String[] args) {
-        int[] values = {1,2,3,4,5,6,7,8,9,10};
-        TreeNode tree = generateTree(values);
-        System.out.println(tree.getLeftNode().getRightValue());
+        TreeNode gen = generateNodeBinary(3);
+        System.out.println(gen.getValue());
+        System.out.println(gen.getLeftValue());
+        System.out.println(gen.getRightValue());
     }
 
-    private static TreeNode generateTree(int[] values) {
-        TreeNode root = new TreeNode(values[0]);
-        root.setLeft(values[1]);
-        root.setRight(values[2]);
-        return root;
-    }
+    private static TreeNode generateNodeBinary(int value) {
+        TreeNode node = new TreeNode(value);
+        node.generateNodeAndChildren();
+        return node;
+    } 
 }
 
 class TreeNode {
@@ -18,14 +18,14 @@ class TreeNode {
     private TreeNode left;
     private TreeNode right;
 
-    public TreeNode() { }
-
     public TreeNode(int val) {
         this.val = val;
     }
 
-    public void setLeft() { }
-    public void setRight() { }
+    public void generateNodeAndChildren() {
+        this.left = new TreeNode(this.val * 2);
+        this.right = new TreeNode((this.val * 2) + 1);
+    }
 
     public void setLeft(int a) {
         this.left = new TreeNode(a);
@@ -33,6 +33,10 @@ class TreeNode {
 
     public void setRight(int a) {
         this.right = new TreeNode(a);
+    }
+
+    public void setValue(int a) {
+        this.val = a;
     }
 
     public int getLeftValue() {
