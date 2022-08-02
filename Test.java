@@ -1,15 +1,36 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Test {
+    public List<String> path = new ArrayList<>();
+
     public static void main(String[] args) {
         TreeNode root = new TreeNode(1);
-        generateNodes(root, 100);
-        System.out.println(
-                root.getRightNode().getLeftNode().getLeftNode().getRightNode().getLeftNode().getLeftNodeValue());
-        System.out.println(
-                root.getRightNode().getLeftNode().getLeftNode().getRightNode().getLeftNode().getRightNodeValue());
+        int maxValue = 100;
+        int findValue = 100;
+        System.out.println("Generating nodes up to: " + maxValue);
+        generateNodes(root, maxValue);
+        try {
+            int maxExists = root.getRightNode().getLeftNode().getLeftNode().getRightNode().getLeftNode()
+                    .getLeftNodeValue();
+            System.out.println("Resulting max value: " + maxExists);
+            int doesOneMoreExist = root.getRightNode().getLeftNode().getLeftNode().getRightNode().getLeftNode()
+                    .getRightNodeValue();
+            System.out.println(doesOneMoreExist);
+        } catch (NullPointerException np) {
+            System.out.println("If this line shows, the following value doesn't exist!");
+        }
+        System.out.println(String.format("Finding %d starting from root value 1.", findValue));
+        root.findPath(findValue, new ArrayList<Boolean>());
     }
 
+    /**
+     * a recursive class to generate children within a boundary.
+     * 
+     * @param node the base node.
+     * @param max  the value that cannot be exceeded.
+     */
     public static void generateNodes(TreeNode node, int max) {
         HashMap<String, Integer> preview = node.previewValues();
         if (preview.get("left") <= max && preview.get("right") <= max) {
@@ -53,6 +74,7 @@ class TreeNode {
     private Integer val;
     private TreeNode left;
     private TreeNode right;
+    private Integer foundValue;
 
     /**
      * default empty constructor
@@ -94,6 +116,111 @@ class TreeNode {
     public void generateChildren() {
         this.left = new TreeNode(this.val * 2);
         this.right = new TreeNode((this.val * 2) + 1);
+    }
+
+    public void generateChildNode(String node) {
+        switch (node) {
+            case "left":
+                this.left = new TreeNode(this.val * 2);
+                break;
+            case "right":
+                this.right = new TreeNode((this.val * 2) + 1);
+                break;
+            default:
+                System.err.println("Node name not recognized!");
+        }
+    }
+
+    public HashMap<String, Integer> previewValues() {
+        HashMap<String, Integer> values = new HashMap<>();
+        values.put("left", this.val * 2);
+        values.put("right", (this.val * 2) + 1);
+        return values;
+    }
+
+    /**
+     * corrects the found order via searching: RECURSIVE
+     * 
+     * @param input the initial order
+     * @return the corrected order
+     */
+    private List<Boolean> correctOrder(List<Boolean> input) {
+        List<Boolean> corrected = new ArrayList<Boolean>(input.size());
+        for (int i = 0; i <= input.size() - 1; i++) {
+            int index = input.size() - (1 + i);
+            corrected.add(input.get(index));
+        }
+        return corrected;
+    }
+
+    /**
+     * Determines the path to a number - EXCLUSIVE METHOD && RECURSIVE
+     * false means the left node
+     * true means the right node
+     * 
+     * @param number the current number
+     * @param pathTo the list for the path
+     */
+    public void findPath(int number, List<Boolean> pathTo) {
+        List<Boolean> newPath = pathTo.size() > 0 ? pathTo : new ArrayList<Boolean>();
+
+        if (number % 2 > 0) {
+            newPath.add(true);
+            int num = (number - 1) / 2;
+            if (num <= 1) {
+                TreeNode initialNode = new TreeNode(1);
+                initialNode.generateChildren();
+                followPath(0, initialNode, correctOrder(newPath));
+                return;
+            }
+            findPath((number - 1) / 2, newPath);
+        }
+
+        if (number % 2 == 0) {
+            newPath.add(false);
+            int num = number / 2;
+            if (num <= 1) {
+                TreeNode initialNode = new TreeNode(1);
+                initialNode.generateChildren();
+                followPath(0, initialNode, correctOrder(newPath));
+                return;
+            }
+            findPath(number / 2, newPath);
+        }
+    }
+
+    /**
+     * follows the found path regardless of node creation
+     * 
+     * @param step the current step.
+     * @param node the node its on.
+     */
+    public void followPath(int step, TreeNode node, List<Boolean> path) {
+        if (step > path.size() - 1) {
+            this.foundValue = node.getNodeValue();
+            return;
+        }
+
+        if (path.get(step)) {
+            System.out.println(String.format("Go Right, resulting value: %d", node.getRightNodeValue()));
+            TreeNode rightNode = new TreeNode(node.getRightNodeValue());
+            rightNode.generateChildren();
+            followPath(step + 1, rightNode, path);
+        }
+
+        if (!path.get(step)) {
+            System.out.println(String.format("Go Left, resulting value: %d", node.getLeftNodeValue()));
+            TreeNode leftNode = new TreeNode(node.getLeftNodeValue());
+            leftNode.generateChildren();
+            followPath(step + 1, leftNode, path);
+        }
+    }
+
+    public void followPathIfExists(int step, TreeNode node, List<Boolean> path) throws NullPointerException {
+        // thiis will follow the path from the current Tree.
+        // pass the root node and follow the path, probably going to need to set this
+        // once again.
+        // man--- sucks i deleted that just a minute ago
     }
 
     /**
@@ -142,31 +269,20 @@ class TreeNode {
     }
 
     /**
+     * getter for the found value from the followed path.
+     * 
+     * @return the found number.
+     */
+    public int getFoundValue() {
+        return this.foundValue;
+    }
+
+    /**
      * sets the value for the target node
      * 
      * @param value the set value of the node.
      */
     public void setValue(int value) {
         this.val = value;
-    }
-
-    public void generateChildNode(String node) {
-        switch (node) {
-            case "left":
-                this.left = new TreeNode(this.val * 2);
-                break;
-            case "right":
-                this.right = new TreeNode((this.val * 2) + 1);
-                break;
-            default:
-                System.err.println("Node name not recognized!");
-        }
-    }
-
-    public HashMap<String, Integer> previewValues() {
-        HashMap<String, Integer> values = new HashMap<>();
-        values.put("left", this.val * 2);
-        values.put("right", (this.val * 2) + 1);
-        return values;
     }
 }

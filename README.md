@@ -7,8 +7,10 @@
 
 What has been done so far?
 - [x] Tree generation up to a specified value without exceeding.
-- [ ] Searching for values to see if they exist.
-- [ ] Route generation for an existing value.
+- [x] Finding and Generating the route for a value that might not have a node.
+- [ ] Determining if a node exists for the queried value.
+- [ ] Make an interpreter for ease-of-access to find in a tree. EX:
+    - Find the path for 100 in a complete tree. Then using a precreated Tree, find the value from the path and if it exists.
 - [ ] Making a tree based off an array / list of values.
 
 ---
