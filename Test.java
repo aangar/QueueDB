@@ -8,7 +8,7 @@ public class Test {
     public static void main(String[] args) {
         TreeNode root = new TreeNode(1);
         int maxValue = 100;
-        int findValue = 100;
+        int findValue = 785;
         System.out.println("Generating nodes up to: " + maxValue);
         generateNodes(root, maxValue);
         try {
@@ -21,8 +21,10 @@ public class Test {
         } catch (NullPointerException np) {
             System.out.println("If this line shows, the following value doesn't exist!");
         }
-        System.out.println(String.format("Finding %d starting from root value 1.", findValue));
+        System.out.println(String.format("Finding the path to value %d", findValue));
         root.findPath(findValue, new ArrayList<Boolean>());
+        System.out.println(root.getReadablePathToValue());
+        System.out.println(root.getFoundValue());
     }
 
     /**
@@ -75,6 +77,7 @@ class TreeNode {
     private TreeNode left;
     private TreeNode right;
     private Integer foundValue;
+    private List<String> readablePathToValue;
 
     /**
      * default empty constructor
@@ -153,6 +156,19 @@ class TreeNode {
         return corrected;
     }
 
+    private void generateReadablePath(List<Boolean> input) {
+        List<String> readable = new ArrayList<String>();
+        for (int i = 0; i < input.size(); i++) {
+            if (input.get(i)) {
+                readable.add("Right");
+            }
+            if (!input.get(i)) {
+                readable.add("Left");
+            }
+        }
+        this.readablePathToValue = readable;
+    }
+
     /**
      * Determines the path to a number - EXCLUSIVE METHOD && RECURSIVE
      * false means the left node
@@ -170,7 +186,9 @@ class TreeNode {
             if (num <= 1) {
                 TreeNode initialNode = new TreeNode(1);
                 initialNode.generateChildren();
-                followPath(0, initialNode, correctOrder(newPath));
+                List<Boolean> correctedOrder = correctOrder(newPath);
+                generateReadablePath(correctedOrder);
+                followPath(0, initialNode, correctedOrder);
                 return;
             }
             findPath((number - 1) / 2, newPath);
@@ -182,7 +200,9 @@ class TreeNode {
             if (num <= 1) {
                 TreeNode initialNode = new TreeNode(1);
                 initialNode.generateChildren();
-                followPath(0, initialNode, correctOrder(newPath));
+                List<Boolean> correctedOrder = correctOrder(newPath);
+                generateReadablePath(correctedOrder);
+                followPath(0, initialNode, correctedOrder);
                 return;
             }
             findPath(number / 2, newPath);
@@ -202,14 +222,12 @@ class TreeNode {
         }
 
         if (path.get(step)) {
-            System.out.println(String.format("Go Right, resulting value: %d", node.getRightNodeValue()));
             TreeNode rightNode = new TreeNode(node.getRightNodeValue());
             rightNode.generateChildren();
             followPath(step + 1, rightNode, path);
         }
 
         if (!path.get(step)) {
-            System.out.println(String.format("Go Left, resulting value: %d", node.getLeftNodeValue()));
             TreeNode leftNode = new TreeNode(node.getLeftNodeValue());
             leftNode.generateChildren();
             followPath(step + 1, leftNode, path);
@@ -275,6 +293,14 @@ class TreeNode {
      */
     public int getFoundValue() {
         return this.foundValue;
+    }
+
+    /**
+     * getter for the human readable path to the previous specified value
+     * @return list of the steps to follow
+     */
+    public List<String> getReadablePathToValue() {
+        return this.readablePathToValue;
     }
 
     /**
