@@ -5,14 +5,15 @@
 
 ---
 
-What has been done so far?
+Progress Map:
 - [x] Tree generation up to a specified value without exceeding.
 - [x] Finding and Generating the route for a value that might not have a node.
-- [ ] Determining if a node exists for the queried value.
-- [ ] Make an interpreter for ease-of-access to find in a tree. EX:
-    - Find the path for 100 in a complete tree. Then using a precreated Tree, find the value from the path and if it exists.
+- [x] Make an interpreter for ease-of-access to find in a tree. EX: Find the path to 100 in a Search Tree.
+- [ ] User specified boundaries, generation limmits, and search values.
+- [ ] Determining if a child node exists in a structured tree. Howto: Generate tree up to 49, and find out if 100 exists ( it won't )
 - [ ] Making a tree based off an array / list of values.
-
+    - [ ] Find a value in a binary tree, no order to the child nodes. Ex: Generate a tree from array [ 1,65,2,34,null,17, ... ], and find it (probably BFS or DFS)
+- [ ] insert a root at a value and generate the tree from there. Ex: Get the node for a value of 58, and start a new tree starting from there with a value of 5.
 ---
 
 What comes next?
