@@ -1,30 +1,26 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class Test {
     public List<String> path = new ArrayList<>();
 
     public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Generate BST Up to what value? ");
+        int max = s.nextInt();
+        System.out.println("Attempting to generate BST up to specified value...");
         TreeNode root = new TreeNode(1);
-        int maxValue = 100;
-        int findValue = 785;
-        System.out.println("Generating nodes up to: " + maxValue);
-        generateNodes(root, maxValue);
-        try {
-            int maxExists = root.getRightNode().getLeftNode().getLeftNode().getRightNode().getLeftNode()
-                    .getLeftNodeValue();
-            System.out.println("Resulting max value: " + maxExists);
-            int doesOneMoreExist = root.getRightNode().getLeftNode().getLeftNode().getRightNode().getLeftNode()
-                    .getRightNodeValue();
-            System.out.println(doesOneMoreExist);
-        } catch (NullPointerException np) {
-            System.out.println("If this line shows, the following value doesn't exist!");
-        }
-        System.out.println(String.format("Finding the path to value %d", findValue));
+        generateNodes(root, max);
+        System.out.println("Tree Generated! What value should be found?");
+        int findValue = s.nextInt();
+        s.close();
+        System.out.println("Attemping to find and generate path to: " + findValue);
         root.findPath(findValue, new ArrayList<Boolean>());
+        System.out.println(String.format("Path found! To reach %d, starting from a root with value of 1 in a BST, follow these steps: ", findValue));
         System.out.println(root.getReadablePathToValue());
-        System.out.println(root.getFoundValue());
+        root.followPathIfExists(0, root);
     }
 
     /**
@@ -76,8 +72,8 @@ class TreeNode {
     private Integer val;
     private TreeNode left;
     private TreeNode right;
-    private Integer foundValue;
-    private List<String> readablePathToValue;
+    private Integer targetValue;
+    private List<Boolean> pathToValue;
 
     /**
      * default empty constructor
@@ -156,19 +152,6 @@ class TreeNode {
         return corrected;
     }
 
-    private void generateReadablePath(List<Boolean> input) {
-        List<String> readable = new ArrayList<String>();
-        for (int i = 0; i < input.size(); i++) {
-            if (input.get(i)) {
-                readable.add("Right");
-            }
-            if (!input.get(i)) {
-                readable.add("Left");
-            }
-        }
-        this.readablePathToValue = readable;
-    }
-
     /**
      * Determines the path to a number - EXCLUSIVE METHOD && RECURSIVE
      * false means the left node
@@ -187,7 +170,7 @@ class TreeNode {
                 TreeNode initialNode = new TreeNode(1);
                 initialNode.generateChildren();
                 List<Boolean> correctedOrder = correctOrder(newPath);
-                generateReadablePath(correctedOrder);
+                this.pathToValue = correctedOrder;
                 followPath(0, initialNode, correctedOrder);
                 return;
             }
@@ -201,7 +184,7 @@ class TreeNode {
                 TreeNode initialNode = new TreeNode(1);
                 initialNode.generateChildren();
                 List<Boolean> correctedOrder = correctOrder(newPath);
-                generateReadablePath(correctedOrder);
+                this.pathToValue = correctedOrder;
                 followPath(0, initialNode, correctedOrder);
                 return;
             }
@@ -217,7 +200,7 @@ class TreeNode {
      */
     public void followPath(int step, TreeNode node, List<Boolean> path) {
         if (step > path.size() - 1) {
-            this.foundValue = node.getNodeValue();
+            this.targetValue = node.getNodeValue();
             return;
         }
 
@@ -234,11 +217,21 @@ class TreeNode {
         }
     }
 
-    public void followPathIfExists(int step, TreeNode node, List<Boolean> path) throws NullPointerException {
-        // thiis will follow the path from the current Tree.
-        // pass the root node and follow the path, probably going to need to set this
-        // once again.
-        // man--- sucks i deleted that just a minute ago
+    /**
+     * Experimental, not solidified yet. Desired functionality is to work for any tree from a generated path.
+     * @param step  the current step
+     * @param node target node
+     * @param path the path to follow
+     */
+    public void followPathIfExists(int step, TreeNode node) {
+        if (node.getNodeValue() == targetValue) {
+            System.out.println("found it!");
+            return;
+        }
+        if (node.getRightNode() != null && node.getLeftNode() != null) {
+            followPathIfExists(step + 1, node.getLeftNode());
+            followPathIfExists(step + 1, node.getRightNode());
+        }
     }
 
     /**
@@ -292,7 +285,7 @@ class TreeNode {
      * @return the found number.
      */
     public int getFoundValue() {
-        return this.foundValue;
+        return this.targetValue;
     }
 
     /**
@@ -300,7 +293,16 @@ class TreeNode {
      * @return list of the steps to follow
      */
     public List<String> getReadablePathToValue() {
-        return this.readablePathToValue;
+        List<String> readable = new ArrayList<String>();
+        for (int i = 0; i < this.pathToValue.size(); i++) {
+            if (this.pathToValue.get(i)) {
+                readable.add("Right");
+            }
+            if (!this.pathToValue.get(i)) {
+                readable.add("Left");
+            }
+        }
+        return readable;
     }
 
     /**
