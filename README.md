@@ -30,6 +30,16 @@ What comes next?
 
 ---
 
+Topics to Research
+
+1. Self Balancing Tree.
+2. Balanced Tree.
+3. DFS / BFS.
+4. Insertion Methods.
+5. Removal Methods.
+
+---
+
 Thanks for reading. Not sure how often this will update, but I can assume it will.
 <br/>
 Eventually.
