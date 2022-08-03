@@ -15,12 +15,14 @@ public class Test {
         generateNodes(root, max);
         System.out.println("Tree Generated! What value should be found?");
         int findValue = s.nextInt();
-        s.close();
         System.out.println("Attemping to find and generate path to: " + findValue);
         root.findPath(findValue, new ArrayList<Boolean>());
         System.out.println(String.format("Path found! To reach %d, starting from a root with value of 1 in a BST, follow these steps: ", findValue));
         System.out.println(root.getReadablePathToValue());
-        root.followPathIfExists(0, root);
+        System.out.println("What value would you like to see if exists? ");
+        int newFindValue = s.nextInt();
+        root.followPathIfExists(0, root, newFindValue);
+        s.close();
     }
 
     /**
@@ -223,14 +225,22 @@ class TreeNode {
      * @param node target node
      * @param path the path to follow
      */
-    public void followPathIfExists(int step, TreeNode node) {
+    public void followPathIfExists(int step, TreeNode node, int targetValue) {
         if (node.getNodeValue() == targetValue) {
             System.out.println("found it!");
+            System.out.println(String.format("Steps taken: %d, total steps: %d", step, this.pathToValue.size()));
             return;
         }
         if (node.getRightNode() != null && node.getLeftNode() != null) {
-            followPathIfExists(step + 1, node.getLeftNode());
-            followPathIfExists(step + 1, node.getRightNode());
+            followPathIfExists(step + 1, node.getLeftNode(), targetValue);
+            followPathIfExists(step + 1, node.getRightNode(), targetValue);
+        }
+
+        if (node.getRightNode() != null && node.getLeftNode() == null) {
+            followPathIfExists(step + 1, node.getRightNode(), targetValue);
+        }
+        if (node.getRightNode() == null && node.getLeftNode() != null) {
+            followPathIfExists(step + 1, node.getLeftNode(), targetValue);
         }
     }
 
