@@ -231,6 +231,8 @@ class TreeNode {
             System.out.println(String.format("Steps taken: %d, total steps: %d", step, this.pathToValue.size()));
             return;
         }
+
+        // this is for debugging purposes
         if (node.getRightNode() == null && node.getLeftNode() == null) {
             System.out.println("no children, node value " + node.getNodeValue());
             return;
