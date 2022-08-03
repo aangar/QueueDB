@@ -16,7 +16,7 @@ Progress Map:
     - [x] User specified search value on BST, no generation required.
     - [ ] User specified search for a value on a generated tree.
         - [x] Indicate the value exists.
-        - [!] Indicate the value does not exist [in progress]
+        - [ ] Indicate the value does not exist **[in progress]**
 - [ ] Making a tree based off an array / list of values. Traversal.
     - [ ] Generate a tree from an array of values. *Needs research*
     - [ ] Find a value from the previously generated tree.
