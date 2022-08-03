@@ -17,10 +17,12 @@ Progress Map:
     - [ ] User specified search for a value on a generated tree.
         - [x] Indicate the value exists.
         - [ ] Indicate the value does not exist **[in progress]**
+    - [ ] Allow a user to do different things, don't hard code program.
 - [ ] Making a tree based off an array / list of values. Traversal.
     - [ ] Generate a tree from an array of values. *Needs research*
     - [ ] Find a value from the previously generated tree.
 - [ ] insert a root at a value and generate the tree from there. Ex: Get the node for a value of 58, and start a new tree starting from there with a value of 5.
+- [ ] Make this a package, perhaps?
 ---
 
 What comes next?
