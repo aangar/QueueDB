@@ -12,7 +12,7 @@ public class Test {
         int max = s.nextInt();
         System.out.println("Attempting to generate BST up to specified value...");
         TreeNode root = new TreeNode(1);
-        generateNodes(root, max);
+        root.generateNodes(root, max);
         System.out.println("Tree Generated! What value should be found?");
         int findValue = s.nextInt();
         System.out.println("Attemping to find and generate path to: " + findValue);
@@ -23,43 +23,6 @@ public class Test {
         int newFindValue = s.nextInt();
         root.followPathIfExists(0, root, newFindValue);
         s.close();
-    }
-
-    /**
-     * a recursive class to generate children within a boundary.
-     * 
-     * @param node the base node.
-     * @param max  the value that cannot be exceeded.
-     */
-    public static void generateNodes(TreeNode node, int max) {
-        HashMap<String, Integer> preview = node.previewValues();
-        if (preview.get("left") <= max && preview.get("right") <= max) {
-            node.generateChildren();
-        }
-
-        if (preview.get("left") > max || preview.get("right") > max) {
-            if (preview.get("left") <= max) {
-                node.generateChildNode("left");
-            }
-            if (preview.get("right") <= max) {
-                node.generateChildNode("right");
-            }
-        }
-
-        if (preview.get("left") > max) {
-            return;
-        }
-        if (preview.get("right") > max) {
-            return;
-        }
-
-        if (!node.getLeftNodeValue().equals(null)) {
-            generateNodes(node.getLeftNode(), max);
-        }
-
-        if (!node.getRightNodeValue().equals(null)) {
-            generateNodes(node.getRightNode(), max);
-        }
     }
 }
 
@@ -129,6 +92,43 @@ class TreeNode {
                 break;
             default:
                 System.err.println("Node name not recognized!");
+        }
+    }
+
+        /**
+     * a recursive class to generate children within a boundary.
+     * 
+     * @param node the base node.
+     * @param max  the value that cannot be exceeded.
+     */
+    public void generateNodes(TreeNode node, int max) {
+        HashMap<String, Integer> preview = node.previewValues();
+        if (preview.get("left") <= max && preview.get("right") <= max) {
+            node.generateChildren();
+        }
+
+        if (preview.get("left") > max || preview.get("right") > max) {
+            if (preview.get("left") <= max) {
+                node.generateChildNode("left");
+            }
+            if (preview.get("right") <= max) {
+                node.generateChildNode("right");
+            }
+        }
+
+        if (preview.get("left") > max) {
+            return;
+        }
+        if (preview.get("right") > max) {
+            return;
+        }
+
+        if (!node.getLeftNodeValue().equals(null)) {
+            generateNodes(node.getLeftNode(), max);
+        }
+
+        if (!node.getRightNodeValue().equals(null)) {
+            generateNodes(node.getRightNode(), max);
         }
     }
 
@@ -232,9 +232,8 @@ class TreeNode {
             return;
         }
 
-        // this is for debugging purposes
         if (node.getRightNode() == null && node.getLeftNode() == null) {
-            System.out.println("no children, node value " + node.getNodeValue());
+            //does something need to be done in this case other than return ?
             return;
         }
 
