@@ -231,6 +231,11 @@ class TreeNode {
             System.out.println(String.format("Steps taken: %d, total steps: %d", step, this.pathToValue.size()));
             return;
         }
+        if (node.getRightNode() == null && node.getLeftNode() == null) {
+            System.out.println("no children, node value " + node.getNodeValue());
+            return;
+        }
+
         if (node.getRightNode() != null && node.getLeftNode() != null) {
             followPathIfExists(step + 1, node.getLeftNode(), targetValue);
             followPathIfExists(step + 1, node.getRightNode(), targetValue);
@@ -242,6 +247,7 @@ class TreeNode {
         if (node.getRightNode() == null && node.getLeftNode() != null) {
             followPathIfExists(step + 1, node.getLeftNode(), targetValue);
         }
+
     }
 
     /**
