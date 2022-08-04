@@ -46,6 +46,10 @@ Topics to Research
 3. DFS / BFS.
 4. Insertion Methods.
 5. Removal Methods.
+6. Traversal Types and applications.
+    a. Inorder [Left, Root, Right]
+    b. Postorder [Left, Right, Root]
+    c. Preorder [Root, Left, Right]
 
 ---
 
