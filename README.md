@@ -11,18 +11,19 @@ Progress Map:
 - [x] Make an interpreter for ease-of-access to find in a tree. EX: Find the path to 100 in a Search Tree.  
 - [x] Determining if a child node exists in a structured tree.
 - [x] Validation to ensure automatic generation is working properly. 
+- [x] Preorder Traversal for a Binary Tree.
 - [ ] User Incorporation.
     - [x] User specified BST Generation Boundaries.
     - [x] User specified search value on BST, no generation required.
     - [x] User specified search if a value exists on a tree.
         - [x] Indicate the value exists.
-        - [x] Indicate the value does not exist **[in progress]**
-    - [ ] Allow a user to do different things, don't hard code program.
+        - [x] Indicate the value does not exist
+    - [ ] Allow a more user-generated and interactive experience.
 - [ ] Making a tree based off an array / list of values. Traversal.
     - [ ] Generate a tree from an array of values. *Needs research*
     - [ ] Find a value from the previously generated tree.
 - [ ] insert a root at a value and generate the tree from there. Ex: Get the node for a value of 58, and start a new tree starting from there with a value of 5.
-- [ ] Make this a package, perhaps?
+- [ ] Package different Trees as classes, and their methods. If there is overlap like traversals, or verifying existance, keep it in a shared methods file.
 ---
 
 What comes next?
