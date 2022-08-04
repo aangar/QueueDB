@@ -8,20 +8,18 @@ public class Test {
 
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
-        System.out.println("Generate BST Up to what value? ");
-        int max = s.nextInt();
-        System.out.println("Attempting to generate BST up to specified value...");
+        System.out.print("Max generation value: ");
+        int maxGeneration = s.nextInt();
+        s.nextLine();
+        System.out.println("\nGenerating BST up to " + maxGeneration);
         TreeNode root = new TreeNode(1);
-        root.generateNodes(root, max);
-        System.out.println("Tree Generated! What value should be found?");
-        int findValue = s.nextInt();
-        System.out.println("Attemping to find and generate path to: " + findValue);
-        root.findPath(findValue, new ArrayList<Boolean>());
-        System.out.println(String.format("Path found! To reach %d, starting from a root with value of 1 in a BST, follow these steps: ", findValue));
-        System.out.println(root.getReadablePathToValue());
-        System.out.println("What value would you like to see if exists? ");
-        int newFindValue = s.nextInt();
-        root.followPathIfExists(0, root, newFindValue);
+        root.generateNodes(root, maxGeneration);
+        System.out.println("BST Generated!");
+        System.out.print("Value to verify existence: ");
+        String input = s.nextLine();
+        Integer validateValue = Integer.parseInt(input);
+        System.out.println("Does " + validateValue + " exist: " + root.getDoesValueExist(root, validateValue));
+
         s.close();
     }
 }
@@ -31,14 +29,24 @@ public class Test {
  * Written entirely from scratch.
  * Thanks, Derek.
  * 
- * @author aangar
+ * @author AJ Angarita, 2022
+ * 
  */
 class TreeNode {
+    // base TreeNode fields
     private Integer val;
     private TreeNode left;
     private TreeNode right;
-    private Integer targetValue;
-    private List<Boolean> pathToValue;
+    /**
+     * These fields are in tandem to one antoher.
+     * generatedPathToValue is set in the findPath method.
+     * generatedPathValue is set in the followGeneratedPath method
+     */
+    private List<Boolean> generatedPathToValue;
+    private Integer generatedPathValue;
+
+    // this field is for checking if a value exists in a generated tree.
+    private boolean doesValueExist = false;
 
     /**
      * default empty constructor
@@ -76,6 +84,9 @@ class TreeNode {
     /**
      * Generates values for the children nodes,
      * not inlcuding their following nodes.
+     * 
+     * @author AJ Angarita, 2022
+     * 
      */
     public void generateChildren() {
         this.left = new TreeNode(this.val * 2);
@@ -95,11 +106,20 @@ class TreeNode {
         }
     }
 
-        /**
-     * a recursive class to generate children within a boundary.
+    public HashMap<String, Integer> previewValues() {
+        HashMap<String, Integer> values = new HashMap<>();
+        values.put("left", this.val * 2);
+        values.put("right", (this.val * 2) + 1);
+        return values;
+    }
+
+    /**
+     * A method to generate the nodes up to a specified value. Intended for use with
+     * a Complete Binary Tree.
      * 
      * @param node the base node.
      * @param max  the value that cannot be exceeded.
+     * @author AJ Angarita, 2022
      */
     public void generateNodes(TreeNode node, int max) {
         HashMap<String, Integer> preview = node.previewValues();
@@ -132,18 +152,13 @@ class TreeNode {
         }
     }
 
-    public HashMap<String, Integer> previewValues() {
-        HashMap<String, Integer> values = new HashMap<>();
-        values.put("left", this.val * 2);
-        values.put("right", (this.val * 2) + 1);
-        return values;
-    }
-
     /**
-     * corrects the found order via searching: RECURSIVE
+     * Takes the boolean input path, and converts it to start from a root value of
+     * 1.
      * 
      * @param input the initial order
      * @return the corrected order
+     * @author AJ Angarita, 2022
      */
     private List<Boolean> correctOrder(List<Boolean> input) {
         List<Boolean> corrected = new ArrayList<Boolean>(input.size());
@@ -155,14 +170,13 @@ class TreeNode {
     }
 
     /**
-     * Determines the path to a number - EXCLUSIVE METHOD && RECURSIVE
-     * false means the left node
-     * true means the right node
+     * Finds the path to the specified value in context of a Complete Binary Tree.
+     * Does <b>not</b> depend on node generation.
      * 
      * @param number the current number
      * @param pathTo the list for the path
      */
-    public void findPath(int number, List<Boolean> pathTo) {
+    public void generatePathToValue(int number, List<Boolean> pathTo) {
         List<Boolean> newPath = pathTo.size() > 0 ? pathTo : new ArrayList<Boolean>();
 
         if (number % 2 > 0) {
@@ -172,11 +186,10 @@ class TreeNode {
                 TreeNode initialNode = new TreeNode(1);
                 initialNode.generateChildren();
                 List<Boolean> correctedOrder = correctOrder(newPath);
-                this.pathToValue = correctedOrder;
-                followPath(0, initialNode, correctedOrder);
+                this.generatedPathToValue = correctedOrder;
                 return;
             }
-            findPath((number - 1) / 2, newPath);
+            generatePathToValue((number - 1) / 2, newPath);
         }
 
         if (number % 2 == 0) {
@@ -186,69 +199,104 @@ class TreeNode {
                 TreeNode initialNode = new TreeNode(1);
                 initialNode.generateChildren();
                 List<Boolean> correctedOrder = correctOrder(newPath);
-                this.pathToValue = correctedOrder;
-                followPath(0, initialNode, correctedOrder);
+                this.generatedPathToValue = correctedOrder;
                 return;
             }
-            findPath(number / 2, newPath);
+            generatePathToValue(number / 2, newPath);
         }
     }
 
     /**
-     * follows the found path regardless of node creation
+     * Follows <b>this.generatedPathToValue</b>, and will set
+     * <b>this.generatedPathValue</b> as
+     * the
+     * final result once reaching the end of the steps.
+     * 
+     * @author AJ Angarita, 2022
      * 
      * @param step the current step.
-     * @param node the node its on.
+     * @param node the node it's on.
+     * @param path the path to follow.
      */
-    public void followPath(int step, TreeNode node, List<Boolean> path) {
-        if (step > path.size() - 1) {
-            this.targetValue = node.getNodeValue();
+    private void followGeneratedPath(int step, int value) {
+        if (step > this.generatedPathToValue.size() - 1) {
+            this.generatedPathValue = value;
             return;
         }
 
-        if (path.get(step)) {
-            TreeNode rightNode = new TreeNode(node.getRightNodeValue());
-            rightNode.generateChildren();
-            followPath(step + 1, rightNode, path);
+        if (this.generatedPathToValue.get(step)) {
+            followGeneratedPath(step + 1, (value * 2) + 1);
         }
 
-        if (!path.get(step)) {
-            TreeNode leftNode = new TreeNode(node.getLeftNodeValue());
-            leftNode.generateChildren();
-            followPath(step + 1, leftNode, path);
+        if (!this.generatedPathToValue.get(step)) {
+            followGeneratedPath(step + 1, value * 2);
         }
     }
 
     /**
-     * Experimental, not solidified yet. Desired functionality is to work for any tree from a generated path.
-     * @param step  the current step
-     * @param node target node
-     * @param path the path to follow
+     * Generates the path to a value based off a Complete Binary Tree. It then
+     * follows that path and will return the value. This is essentially to make sure
+     * automatic generation is working properly.
+     * 
+     * @param target the value to validate.
+     * @return the value the path generates.
+     * @author AJ Angarita, 2022
      */
-    public void followPathIfExists(int step, TreeNode node, int targetValue) {
-        if (node.getNodeValue() == targetValue) {
-            System.out.println("found it!");
-            System.out.println(String.format("Steps taken: %d, total steps: %d", step, this.pathToValue.size()));
-            return;
-        }
+    public boolean validateAutomaticGeneration(int target) {
+        this.generatedPathToValue = null;
+        this.generatedPathValue = null;
+        generatePathToValue(target, new ArrayList<>());
+        followGeneratedPath(0, 1);
+        return target == this.generatedPathValue;
+    }
 
-        if (node.getRightNode() == null && node.getLeftNode() == null) {
-            //does something need to be done in this case other than return ?
+    /**
+     * A private method that will search a tree for the target value.
+     * If the value is found, then this.doesValueExist will be set.
+     * If not, then it will remain null or false - initially null, but
+     * set to false when calling getDoesValueExist.
+     * 
+     * @author AJ Angarita, 2022
+     *
+     * @param node        The current node. Note this usually starts at the root
+     *                    node,
+     *                    however it can start wherever - just know where that is.
+     * @param targetValue The value to search for. This remains consistent
+     *                    and is passed from method call to method call.
+     */
+    private void findIfValueExists(TreeNode node, int targetValue) {
+        if (node.getNodeValue() == targetValue) {
+            this.doesValueExist = true;
             return;
         }
 
         if (node.getRightNode() != null && node.getLeftNode() != null) {
-            followPathIfExists(step + 1, node.getLeftNode(), targetValue);
-            followPathIfExists(step + 1, node.getRightNode(), targetValue);
+            findIfValueExists(node.getLeftNode(), targetValue);
+            findIfValueExists(node.getRightNode(), targetValue);
         }
 
         if (node.getRightNode() != null && node.getLeftNode() == null) {
-            followPathIfExists(step + 1, node.getRightNode(), targetValue);
+            findIfValueExists(node.getRightNode(), targetValue);
         }
         if (node.getRightNode() == null && node.getLeftNode() != null) {
-            followPathIfExists(step + 1, node.getLeftNode(), targetValue);
+            findIfValueExists(node.getLeftNode(), targetValue);
         }
+    }
 
+    /**
+     * This will check if the specified value exists on the generated tree.
+     * 
+     * @param node   root node, ideally.
+     * @param target value to search for.
+     * @return true / false if the value exists.
+     */
+    public boolean getDoesValueExist(TreeNode node, int target) {
+        this.doesValueExist = false;
+        findIfValueExists(node, target);
+        if (this.doesValueExist) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -299,23 +347,30 @@ class TreeNode {
     /**
      * getter for the found value from the followed path.
      * 
-     * @return the found number.
+     * @return If negative 1, a path was not generated. Otherwise the computed
+     *         value.
      */
-    public int getFoundValue() {
-        return this.targetValue;
+    public int getGeneratedPathValue() {
+        if (this.generatedPathToValue == null || this.generatedPathToValue.size() < 1) {
+            System.err.print("No path has been generated. Generate a path now? ( yes / no ): ");
+            return -1;
+        }
+        followGeneratedPath(0, 1);
+        return this.generatedPathValue;
     }
 
     /**
      * getter for the human readable path to the previous specified value
+     * 
      * @return list of the steps to follow
      */
     public List<String> getReadablePathToValue() {
         List<String> readable = new ArrayList<String>();
-        for (int i = 0; i < this.pathToValue.size(); i++) {
-            if (this.pathToValue.get(i)) {
+        for (int i = 0; i < this.generatedPathToValue.size(); i++) {
+            if (this.generatedPathToValue.get(i)) {
                 readable.add("Right");
             }
-            if (!this.pathToValue.get(i)) {
+            if (!this.generatedPathToValue.get(i)) {
                 readable.add("Left");
             }
         }

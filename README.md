@@ -8,15 +8,15 @@
 Progress Map:
 - [x] Tree generation up to a specified value without exceeding.
 - [x] Finding and Generating the route for a value that might not have a node.
-- [x] Make an interpreter for ease-of-access to find in a tree. EX: Find the path to 100 in a Search Tree.
+- [x] Make an interpreter for ease-of-access to find in a tree. EX: Find the path to 100 in a Search Tree.  
 - [x] Determining if a child node exists in a structured tree.
+- [x] Validation to ensure automatic generation is working properly. 
 - [ ] User Incorporation.
     - [x] User specified BST Generation Boundaries.
-    - [x] User specified BST Generation Limits ( potential duplicate of above ).
     - [x] User specified search value on BST, no generation required.
-    - [ ] User specified search for a value on a generated tree.
+    - [x] User specified search if a value exists on a tree.
         - [x] Indicate the value exists.
-        - [ ] Indicate the value does not exist **[in progress]**
+        - [x] Indicate the value does not exist **[in progress]**
     - [ ] Allow a user to do different things, don't hard code program.
 - [ ] Making a tree based off an array / list of values. Traversal.
     - [ ] Generate a tree from an array of values. *Needs research*
