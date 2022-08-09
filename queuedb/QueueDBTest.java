@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
  */
 public class QueueDBTest {
     public static void runTests(String dir) {
-        List<SampleDocument> smpDocs = List.of("alpha")
-            .stream()
-            .map(SampleDocument::convertToSampleDoc)
-            .collect(Collectors.toList());
+        List<SampleDocument> smpDocs = List.of("alpha", "beta", "ceta", "delta")
+                .stream()
+                .map(SampleDocument::convertToSampleDoc)
+                .collect(Collectors.toList());
         DynamicQueue<SampleDocument> docsQueue = new DynamicQueue<SampleDocument>(smpDocs);
 
         new File(dir).mkdir();
@@ -49,9 +49,9 @@ public class QueueDBTest {
 
         if (e.length > 0) {
             for (String file : e) {
-                DatabaseDocumentReader<SampleDocument> fileRead = new DatabaseDocumentReader<SampleDocument>(SampleDocument.class);
-                SampleDocument parsed = fileRead.readFile(dir + file, SampleDocument.getKeys());
-                System.out.println("If we did it: " + parsed.getName());
+                DatabaseDocumentReader<SampleDocument> fileRead = new DatabaseDocumentReader<SampleDocument>(
+                        SampleDocument.class);
+                SampleDocument parsed = fileRead.readFile(dir + file);
             }
         }
     }
