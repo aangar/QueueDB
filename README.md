@@ -27,16 +27,16 @@ Binary Tree Progress Map:
 QueueDB Progress Map:
 - [x] Making Documents from a Queue.
 - [x] Temporary Database. Will remove older data on new data generation.
-- [ ] Making a base "DatabaseDocument.java" interface containing the ID, reduces duplication.
-    - [ ] Create Interface.
-    - [ ] Create id field and method.
-    - [ ] Convert existing classes.
-    - [ ] Implement this with newer classes.
+- [x] Making a base "DatabaseDocument.java" interface containing the ID, reduces duplication.
+    - [x] Create Class.
+    - [x] Create id field and method.
+    - [x] Convert existing classes.
+    - [ ] **ONGOING** Implement this with newer classes.
 - [ ] Finding a Better Way to Generate DB Documents.
     - [ ] Converter Class: will apply to all documents.
 - [ ] Allow a user to generate documents.
-    - [ ] From a List of Names (Current Setup).
-    - [ ] Allow a user to load a file and parse it from there.
+    - [x] From a List of Names (Current Setup).
+    - [ ] Allow a user to load a JSON and parse it from there.
 - [ ] Searching this Database.
     - [ ] Finding a match based on a query.
         - [ ] String matching.
