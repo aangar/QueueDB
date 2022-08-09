@@ -4,8 +4,7 @@
 ### Motive: Wanted to start somewhere with data structures before formal instruction.
 
 ---
-
-Progress Map:
+Binary Tree Progress Map:
 - [x] Tree generation up to a specified value without exceeding.
 - [x] Finding and Generating the route for a value that might not have a node.
 - [x] Make an interpreter for ease-of-access to find in a tree. EX: Find the path to 100 in a Search Tree.  
@@ -25,7 +24,43 @@ Progress Map:
 - [ ] insert a root at a value and generate the tree from there. Ex: Get the node for a value of 58, and start a new tree starting from there with a value of 5.
 - [ ] Package different Trees as classes, and their methods. If there is overlap like traversals, or verifying existance, keep it in a shared methods file.
 ---
-
+QueueDB Progress Map:
+- [x] Making Documents from a Queue.
+- [x] Temporary Database. Will remove older data on new data generation.
+- [ ] Making a base "DatabaseDocument.java" interface containing the ID, reduces duplication.
+    - [ ] Create Interface.
+    - [ ] Create id field and method.
+    - [ ] Convert existing classes.
+    - [ ] Implement this with newer classes.
+- [ ] Finding a Better Way to Generate DB Documents.
+    - [ ] Converter Class: will apply to all documents.
+- [ ] Allow a user to generate documents.
+    - [ ] From a List of Names (Current Setup).
+    - [ ] Allow a user to load a file and parse it from there.
+- [ ] Searching this Database.
+    - [ ] Finding a match based on a query.
+        - [ ] String matching.
+        - [ ] GT / LT / EQ / NE, etc...
+        - [ ] Multiple Queries.
+    - [ ] Finding all.
+    - [ ] Returning found documents.
+        - [ ] How to convert from JSON to a Object / Class.
+            - [ ] ObjectMapper from Jackson?
+- [ ] Efficiency.
+    - [ ] Research Efficient methods and practices to load data.
+    - [ ] Find best ways to secure it and use small amounts of space.
+    - [ ] Use little amounts of resources.
+- [ ] DB AppFlow.
+    - [ ] Initialization
+        - [x] Windows
+        - [ ] MacOS
+        - [ ] Linux
+    - [ ] Termination
+        - [ ] Flag / User input?
+        - [ ] Raw kill
+            - [ ] Verify File Integrity on startup task.
+---
+ 
 What comes next?
 1. Constant Tasks
     - Constant general cleanup of unused methods.

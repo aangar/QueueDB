@@ -1,35 +1,15 @@
+package binarytrees;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
-
-public class Test {
-    public List<String> path = new ArrayList<>();
-
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
-        System.out.print("Max generation value: ");
-        int maxGeneration = s.nextInt();
-        s.nextLine();
-        System.out.println("\nGenerating BST up to " + maxGeneration);
-        TreeNode root = new TreeNode(1);
-        root.generateNodes(root, maxGeneration);
-        System.out.println("BST Generated!");
-        System.out.print("Value to verify existence: ");
-        String input = s.nextLine();
-        Integer validateValue = Integer.parseInt(input);
-        System.out.println("Does " + validateValue + " exist: " + root.getDoesValueExist(root, validateValue));
-
-        s.close();
-    }
-}
+import java.util.HashMap;
 
 /**
  * A class for a node of a binary tree.
  * Written entirely from scratch.
  * Thanks, Derek.
  * 
- * @author AJ Angarita, 2022
+ * @author aangar, 2022
  * 
  */
 class TreeNode {
@@ -85,7 +65,7 @@ class TreeNode {
      * Generates values for the children nodes,
      * not inlcuding their following nodes.
      * 
-     * @author AJ Angarita, 2022
+     * @author aangar, 2022
      * 
      */
     public void generateChildren() {
@@ -119,7 +99,7 @@ class TreeNode {
      * 
      * @param node the base node.
      * @param max  the value that cannot be exceeded.
-     * @author AJ Angarita, 2022
+     * @author aangar, 2022
      */
     public void generateNodes(TreeNode node, int max) {
         HashMap<String, Integer> preview = node.previewValues();
@@ -158,7 +138,7 @@ class TreeNode {
      * 
      * @param input the initial order
      * @return the corrected order
-     * @author AJ Angarita, 2022
+     * @author aangar, 2022
      */
     private List<Boolean> correctOrder(List<Boolean> input) {
         List<Boolean> corrected = new ArrayList<Boolean>(input.size());
@@ -212,7 +192,7 @@ class TreeNode {
      * the
      * final result once reaching the end of the steps.
      * 
-     * @author AJ Angarita, 2022
+     * @author aangar, 2022
      * 
      * @param step the current step.
      * @param node the node it's on.
@@ -240,7 +220,7 @@ class TreeNode {
      * 
      * @param target the value to validate.
      * @return the value the path generates.
-     * @author AJ Angarita, 2022
+     * @author aangar, 2022
      */
     public boolean validateAutomaticGeneration(int target) {
         this.generatedPathToValue = null;
@@ -256,7 +236,7 @@ class TreeNode {
      * If not, then it will remain null or false - initially null, but
      * set to false when calling getDoesValueExist.
      * 
-     * @author AJ Angarita, 2022
+     * @author aangar, 2022
      *
      * @param node        The current node. Note this usually starts at the root
      *                    node,
