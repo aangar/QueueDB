@@ -1,5 +1,6 @@
 package queuedb;
 
+import java.util.List;
 import java.time.Instant;
 
 /**
@@ -11,11 +12,11 @@ public class SampleDocument extends DatabaseDocument {
     private Instant generationDate;
 
     SampleDocument() {
-        generateUUID();
+        generateId();
     }
 
     SampleDocument(String name, Instant genDate) {
-        generateUUID();
+        generateId();
         this.name = name;
         this.generationDate = genDate;
     }
@@ -26,6 +27,18 @@ public class SampleDocument extends DatabaseDocument {
 
     public Instant getGenerationDate() {
         return this.generationDate;
+    }
+
+    public static List<String> getKeys() {
+        return List.of("name", "id", "generationDate");
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGenerationDate(String genDate) {
+        this.generationDate = Instant.parse(genDate);
     }
 
     /**

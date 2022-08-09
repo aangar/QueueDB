@@ -23,7 +23,7 @@ then
     compile_java_files "./binarytrees"
 elif [[ "$FLAG" == "dynamic" ]]
 then
-    compile_java_files "./queue"
+    compile_java_files "./queuedb"
 fi
 
 cd "$BASE_DIR"
