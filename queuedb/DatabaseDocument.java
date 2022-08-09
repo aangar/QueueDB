@@ -5,15 +5,20 @@ package queuedb;
  * @author aangar, 2022
  */
 public class DatabaseDocument {
-    public String UUID;
+    public String id;
 
-    public String getUUID() {
-        return this.UUID;
+    public String getId() {
+        return this.id;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
     /**
      * Method to generate the UUID of the document.
      */
-    public void generateUUID() {
+    public void generateId() {
         char[] letters = { 'q', 'e', 't', 'u', 'o', 'a' };
         String UUID = "";
         for (int i = 0; i < 4 * 4; i++) {
@@ -27,6 +32,6 @@ public class DatabaseDocument {
                 UUID = UUID + (int) Math.floor(Math.random() * 9);
             }
         }
-        this.UUID = UUID;
+        this.id = UUID;
     }
 }
