@@ -15,7 +15,12 @@ import java.util.stream.Collectors;
  */
 public class QueueDBTest {
     public static void runTests(String dir) {
-        Queue<Doc> returned = genDocList(List.of("alpha", "beta", "charlie", "delta"));
+        List<SampleDocument> smpDocs = List.of("alpha", "beta", "ceta", "delta", "epsilon")
+            .stream()
+            .map(SampleDocument::convertToSampleDoc)
+            .collect(Collectors.toList());
+        DynamicQueue<SampleDocument> docsQueue = new DynamicQueue<SampleDocument>(smpDocs);
+
         File baseDir = new File(dir);
         String[] existingFiles = baseDir.list();
         if (existingFiles.length > 0) {
@@ -23,14 +28,15 @@ public class QueueDBTest {
                 new File(dir + file).delete();
             }
         }
-        new File(dir).mkdir();
-        while (returned.size() > 0) {
-            Doc d = returned.poll();
+
+        while (docsQueue.getTotalDocs() > 0) {
+            SampleDocument d = docsQueue.process();
             try {
                 FileWriter writer = new FileWriter(dir + d.getName() + ".json");
                 writer.write("{\n");
+                writer.write(String.format("   \"id\": \"%s\",\n", d.getUUID()));
                 writer.write(String.format("   \"name\": \"%s\",\n", d.getName()));
-                writer.write(String.format("   \"id\": \"%s\"\n", d.getUUID()));
+                writer.write(String.format("   \"generationDate\": \"%s\"\n", d.getGenerationDate()));
                 writer.write("}");
                 writer.close();
             } catch (IOException e) {
@@ -40,58 +46,4 @@ public class QueueDBTest {
         }
     }
 
-    public static Queue<Doc> genDocList(List<String> names) {
-        Queue<Doc> converted = new LinkedList<>(
-                names.stream()
-                        .map(Doc::convertToDoc)
-                        .collect(Collectors.toList()));
-        return converted;
-    }
-
-    /**
-     * Some class made for testing.
-     * 
-     * @author aangar, 2022
-     */
-    private static class Doc {
-        private String name;
-        private String UUID;
-
-        public Doc(String name, String uuid) {
-            this.name = name;
-            this.UUID = uuid;
-        }
-
-        /**
-         * makes a name into a doc class
-         * 
-         * @param name name
-         * @return converted name to a valid document
-         */
-        private static Doc convertToDoc(String name) {
-            int steps = (int) Math.floor(Math.random() * 2) + 2;
-            char[] letters = { 'q', 'e', 't', 'u', 'o', 'a' };
-            String UUID = "";
-            for (int i = 0; i < steps * 4; i++) {
-                if (i % 4 == 0 && i != 0) {
-                    UUID = UUID + "-";
-                }
-                if (i % 2 == 0) {
-                    int val = (int) Math.floor(Math.random() * letters.length);
-                    UUID = UUID + letters[val];
-                } else {
-                    UUID = UUID + (int) Math.floor(Math.random() * 9);
-                }
-            }
-            return new Doc(name, UUID);
-        }
-
-        private String getName() {
-            return this.name;
-        }
-
-        private String getUUID() {
-            return this.UUID;
-        }
-    }
 }
