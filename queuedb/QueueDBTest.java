@@ -7,16 +7,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Class for test methods related to queues
+ * Class for test methods related to queues.
+ * <br>
+ * </br>
+ * What this does as of now:
+ * <ol>
+ * <li>Takes in a list of names.</li>
+ * <li>Coverts said names into a DynamicQueue (the queue with target type).</li>
+ * <li>Ensures the DB folder exists. If not, creates it.</li>
+ * <li>Ensures there are no documents saved. If there are, purges them./li>
+ * <li>Converts documents to JSON and saved them locally./li>
+ * <li>Reads all files, and converts them into the target type./li>
+ * </ol>
  * 
  * @author aangar, 2022
  */
 public class QueueDBTest {
     public static void runTests(String dir) {
-        List<SampleDocument> smpDocs = List.of("alpha")
-            .stream()
-            .map(SampleDocument::convertToSampleDoc)
-            .collect(Collectors.toList());
+        List<SampleDocument> smpDocs = List.of("alpha", "beta", "ceta", "delta")
+                .stream()
+                .map(SampleDocument::convertToSampleDoc)
+                .collect(Collectors.toList());
         DynamicQueue<SampleDocument> docsQueue = new DynamicQueue<SampleDocument>(smpDocs);
 
         new File(dir).mkdir();
@@ -49,9 +60,9 @@ public class QueueDBTest {
 
         if (e.length > 0) {
             for (String file : e) {
-                DatabaseDocumentReader<SampleDocument> fileRead = new DatabaseDocumentReader<SampleDocument>(SampleDocument.class);
-                SampleDocument parsed = fileRead.readFile(dir + file, SampleDocument.getKeys());
-                System.out.println("If we did it: " + parsed.getName());
+                DatabaseParser<SampleDocument> fileRead = new DatabaseParser<SampleDocument>(
+                        SampleDocument.class);
+                SampleDocument parsed = fileRead.readFile(dir + file);
             }
         }
     }

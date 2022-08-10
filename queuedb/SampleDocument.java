@@ -1,10 +1,10 @@
 package queuedb;
 
-import java.util.List;
 import java.time.Instant;
 
 /**
  * Sample Document Class
+ * 
  * @author aangar, 2022
  */
 public class SampleDocument extends DatabaseDocument {
@@ -29,8 +29,26 @@ public class SampleDocument extends DatabaseDocument {
         return this.generationDate;
     }
 
-    public static List<String> getKeys() {
-        return List.of("name", "id", "generationDate");
+    /**
+     * Override method to set parsed properties.
+     * 
+     * @param propName the parsed property name.
+     * @param val      the string value from the JSON file.
+     */
+    public void setParsedProperty(String propName, String val) {
+        switch (propName) {
+            case "id":
+                this.setId(val);
+                break;
+            case "generationDate":
+                this.setGenerationDate(val);
+                break;
+            case "name":
+                this.setName(val);
+                break;
+            default:
+                System.err.println("Property Name not Recognized. Verify cases in setParsedProperty.");
+        }
     }
 
     public void setName(String name) {
@@ -43,6 +61,7 @@ public class SampleDocument extends DatabaseDocument {
 
     /**
      * Makes a string into a SampleDocument
+     * 
      * @param name the name, String.
      * @return a new SampleDocument.
      */

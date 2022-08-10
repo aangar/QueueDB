@@ -2,6 +2,7 @@ package queuedb;
 
 /**
  * Document to extend, holds the ID and generation.
+ * 
  * @author aangar, 2022
  */
 public class DatabaseDocument {
@@ -14,7 +15,7 @@ public class DatabaseDocument {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     /**
      * Method to generate the UUID of the document.
      */
@@ -33,5 +34,9 @@ public class DatabaseDocument {
             }
         }
         this.id = UUID;
+    }
+
+    public void setParsedProperty(String propName, String val) {
+        System.err.println("No conversion body was set, please do so.");
     }
 }
