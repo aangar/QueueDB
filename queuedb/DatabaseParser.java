@@ -9,6 +9,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import queuedb.Objects.DatabaseDocument;
+
 /**
  * A Class to read documents from a Collection,
  * then convert them into the target document.
