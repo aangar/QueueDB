@@ -1,6 +1,5 @@
 package queuedb;
 
-import java.util.List;
 import java.time.Instant;
 
 /**
@@ -30,6 +29,12 @@ public class SampleDocument extends DatabaseDocument {
         return this.generationDate;
     }
 
+    /**
+     * Override method to set parsed properties.
+     * 
+     * @param propName the parsed property name.
+     * @param val      the string value from the JSON file.
+     */
     public void setParsedProperty(String propName, String val) {
         switch (propName) {
             case "id":

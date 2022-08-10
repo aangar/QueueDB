@@ -9,16 +9,42 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseDocumentReader<T extends DatabaseDocument> {
+/**
+ * A Class to read documents from a Collection,
+ * then convert them into the target document.
+ * 
+ * @author aangar, 2022
+ */
+public class DatabaseParser<T extends DatabaseDocument> {
 
+    /**
+     * Target Class Type. This can be anything <b>that extends DatabaseDocument</b>
+     */
     private Class<T> clazz;
+    /**
+     * The returnable class field. This will be set once <b>buildClazz</b> has been
+     * called. <b>Do not modify this directly!</b>
+     */
     private T returnable;
+    /**
+     * A list of Fields found in the target Class. Since any sort of extended fields
+     * will be left out.
+     */
     private List<String> fieldNames;
 
-    public DatabaseDocumentReader(Class<T> clazz) {
+    /**
+     * Default constructor for the DatabaseParser.
+     * 
+     * @param clazz the target class.
+     */
+    public DatabaseParser(Class<T> clazz) {
         this.clazz = clazz;
     }
 
+    /**
+     * Builds a class for the target document to convert to. This must be called
+     * before trying to set fields parsed.
+     */
     private void buildClazz() {
         try {
             Constructor<?> s[] = this.clazz.getDeclaredConstructors();
@@ -42,6 +68,12 @@ public class DatabaseDocumentReader<T extends DatabaseDocument> {
 
     }
 
+    /**
+     * Reads the file from the filename, and returns the parsed object.
+     * 
+     * @param file the path to the file, absolute.
+     * @return the parsed file into the target object.
+     */
     public T readFile(String file) {
         try {
             FileReader fr = new FileReader(file);
