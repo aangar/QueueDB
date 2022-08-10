@@ -1,3 +1,4 @@
 *.class
 sampledb/
 sampledb/*.json
+server_queuedb/node_modules
