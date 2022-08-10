@@ -14,6 +14,7 @@ import queuedb.Objects.SampleDocument;
  * SampleDocumentDAO Class
  */
 public class SampleDocumentDAO extends BaseDAO {
+    private final DatabaseParser<SampleDocument> dbParser;
 
     /**
      * Default constructor.
@@ -21,11 +22,15 @@ public class SampleDocumentDAO extends BaseDAO {
      * @param DIR the directory path to the collection
      */
     public SampleDocumentDAO(String DIR) {
-        this.datbaseParser = new DatabaseParser<SampleDocument>(SampleDocument.class);
         if (!DIR.isEmpty() || DIR != null) {
             new File(DIR).mkdir();
             this.DIR_TO_COLLECTION = DIR;
         }
+        this.dbParser = new DatabaseParser<SampleDocument>(SampleDocument.class, this.DIR_TO_COLLECTION);
+    }
+    
+    public List<SampleDocument> findAll() {
+        return this.dbParser.findAll();
     }
 
     /**

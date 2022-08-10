@@ -12,13 +12,14 @@ import queuedb.DatabaseParser;
 import queuedb.Objects.Person;
 
 public class PersonDAO extends BaseDAO{
+    private final DatabaseParser<Person> dbParser;
 
     public PersonDAO(String DIR) {
-        this.datbaseParser = new DatabaseParser<Person>(Person.class);
         if (!DIR.isEmpty() || DIR != null) {
             new File(DIR).mkdir();
             this.DIR_TO_COLLECTION = DIR;
         }
+        this.dbParser = new DatabaseParser<Person>(Person.class, this.DIR_TO_COLLECTION);
     }
 
     public List<Person> savePersons(List<Person> docs) {

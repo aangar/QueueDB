@@ -1,6 +1,7 @@
 package queuedb;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -8,6 +9,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import queuedb.Objects.DatabaseDocument;
 
@@ -35,12 +38,18 @@ public class DatabaseParser<T extends DatabaseDocument> {
     private List<String> fieldNames;
 
     /**
+     * Name is self explanatory. Come on now.
+     */
+    private String DIR_TO_COLLECTION;
+
+    /**
      * Default constructor for the DatabaseParser.
      * 
      * @param clazz the target class.
      */
-    public DatabaseParser(Class<T> clazz) {
+    public DatabaseParser(Class<T> clazz, String dir) {
         this.clazz = clazz;
+        this.DIR_TO_COLLECTION = dir;
     }
 
     /**
@@ -68,6 +77,34 @@ public class DatabaseParser<T extends DatabaseDocument> {
 
         }
 
+    }
+
+        /**
+     * Builds a class for the target document to convert to. This must be called
+     * before trying to set fields parsed.
+     */
+    private Optional<T> createDraftClazz() {
+        Optional<T> draft = Optional.ofNullable(null);
+        try {
+            Constructor<?> s[] = this.clazz.getDeclaredConstructors();
+            Field[] fields = this.clazz.getDeclaredFields();
+            List<String> allowedFields = new ArrayList<>();
+            allowedFields.add("id");
+            for (Field f : fields) {
+                String name = f.toString();
+                int end = name.lastIndexOf(".") + 1;
+                allowedFields.add(name.substring(end, name.length()));
+            }
+            draft = Optional.of((T) s[0].newInstance());
+        } catch (InvocationTargetException nsm) {
+
+        } catch (InstantiationException ie) {
+
+        } catch (IllegalAccessException iae) {
+
+        }
+
+        return draft;
     }
 
     /**
@@ -105,5 +142,25 @@ public class DatabaseParser<T extends DatabaseDocument> {
         }
 
         return this.returnable;
+    }
+
+    /**
+     * Finds all documents in the collection.
+     * @return found documents.
+     */
+    public List<T> findAll() {
+        File collection = new File(this.DIR_TO_COLLECTION);
+        boolean doesCollectionExist = collection.mkdir();
+        if (!doesCollectionExist) {
+            System.out.println("Collection does not exist.");
+            return new ArrayList<T>();
+        }
+
+        List<String> fileNames = List.of(collection.list());
+        return fileNames.stream().map(x -> {
+            Optional<T> draft = Optional.ofNullable(null);
+            draft = Optional.ofNullable(this.readFile(this.DIR_TO_COLLECTION + x));
+            return draft.get();
+        }).collect(Collectors.toList());
     }
 }

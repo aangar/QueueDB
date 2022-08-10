@@ -40,7 +40,9 @@ public class QueueDBTest {
         PersonDAO personDAO = new PersonDAO(dir + "persons/");
         List<Person> savedPersons = personDAO.savePersons(personDocuments);
         System.out.println("Saved Persons: " + savedPersons.size());
-        // sampDocDAO.clearCollection("SampleDocument");
+        List<SampleDocument> foundPersons = sampDocDAO.findAll();
+        System.out.println("Samp Doc Size: " foundPersons.size());
+        sampDocDAO.clearCollection("SampleDocument");
         personDAO.clearCollection("Person");
     }
 }

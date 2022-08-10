@@ -1,12 +1,10 @@
 package queuedb.DAO;
 
 import java.io.File;
-
 import queuedb.DatabaseParser;
 
 public class BaseDAO {
     public String DIR_TO_COLLECTION;
-    public DatabaseParser<?> datbaseParser;
 
     public void clearCollection(String collectionName) {
         if (this.DIR_TO_COLLECTION == null || this.DIR_TO_COLLECTION.isEmpty()) {
