@@ -32,7 +32,6 @@ delete_java_classes() {
         if [[ "$ext" == ".class" ]]
         then
             rm "./$file" 
-            echo "Removed Class File $file"
         fi
     done
     cd "$BASE_DIR"   
