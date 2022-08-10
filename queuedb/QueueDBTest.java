@@ -37,10 +37,10 @@ public class QueueDBTest {
             .stream()
             .map(Person::generatePersonFromName)
             .collect(Collectors.toList());
-        PersonDAO personDAO = new PersonDAO(dir + "persons");
+        PersonDAO personDAO = new PersonDAO(dir + "persons/");
         List<Person> savedPersons = personDAO.savePersons(personDocuments);
         System.out.println("Saved Persons: " + savedPersons.size());
-        sampDocDAO.clearCollection();
-        personDAO.clearCollection();
+        sampDocDAO.clearCollection("SampleDocument");
+        personDAO.clearCollection("Person");
     }
 }

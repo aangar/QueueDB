@@ -13,9 +13,8 @@ import queuedb.Objects.SampleDocument;
 /**
  * SampleDocumentDAO Class
  */
-public class SampleDocumentDAO {
+public class SampleDocumentDAO extends BaseDAO {
     private final DatabaseParser<SampleDocument> sampleDocumentParser;
-    private String DIR_TO_COLLECTION;
 
     /**
      * Default constructor.
@@ -46,7 +45,7 @@ public class SampleDocumentDAO {
             }
             try {
                 FileWriter writer = new FileWriter(
-                        DIR_TO_COLLECTION + "SampleDocument_" + sampDoc.getName() + "_" + sampDoc.getId() + ".json");
+                        this.DIR_TO_COLLECTION + "SampleDocument_" + sampDoc.getName() + "_" + sampDoc.getId() + ".json");
                 writer.write("{\n");
                 writer.write(String.format("   \"id\": \"%s\",\n", sampDoc.getId()));
                 writer.write(String.format("   \"name\": \"%s\",\n", sampDoc.getName()));
@@ -61,21 +60,4 @@ public class SampleDocumentDAO {
         }
         return saved;
     }
-
-    /**
-     * Clears the SampleDocument collection.
-     */
-    public void clearCollection() {
-        File baseDir = new File(DIR_TO_COLLECTION);
-        String[] existingFiles = baseDir.list();
-        if (existingFiles.length < 1) {
-            return;
-        }
-        if (existingFiles.length >= 1) {
-            for (String file : existingFiles) {
-                new File(DIR_TO_COLLECTION + file).delete();
-            }
-        }
-    }
-
 }

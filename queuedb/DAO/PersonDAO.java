@@ -11,9 +11,8 @@ import java.util.Queue;
 import queuedb.DatabaseParser;
 import queuedb.Objects.Person;
 
-public class PersonDAO {
+public class PersonDAO extends BaseDAO{
     private final DatabaseParser<Person> personParser;
-    private String DIR_TO_COLLECTION;
 
     public PersonDAO(String DIR) {
         this.personParser = new DatabaseParser<Person>(Person.class);
@@ -33,7 +32,7 @@ public class PersonDAO {
             }
             try {
                 FileWriter writer = new FileWriter(
-                        DIR_TO_COLLECTION + "Person_" + person.getName() + "_" + person.getId() + ".json");
+                        this.DIR_TO_COLLECTION + "Person_" + person.getName() + "_" + person.getId() + ".json");
                 writer.write("{\n");
                 writer.write(String.format("   \"id\": \"%s\",\n", person.getId()));
                 writer.write(String.format("   \"name\": \"%s\",\n", person.getName()));
@@ -47,21 +46,5 @@ public class PersonDAO {
             }
         }
         return saved;
-    }
-
-        /**
-     * Clears the SampleDocument collection.
-     */
-    public void clearCollection() {
-        File baseDir = new File(DIR_TO_COLLECTION);
-        String[] existingFiles = baseDir.list();
-        if (existingFiles.length < 1) {
-            return;
-        }
-        if (existingFiles.length >= 1) {
-            for (String file : existingFiles) {
-                new File(DIR_TO_COLLECTION + file).delete();
-            }
-        }
     }
 }
