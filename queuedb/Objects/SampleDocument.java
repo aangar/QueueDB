@@ -1,4 +1,4 @@
-package queuedb;
+package queuedb.Objects;
 
 import java.time.Instant;
 

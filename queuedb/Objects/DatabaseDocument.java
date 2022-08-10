@@ -1,4 +1,4 @@
-package queuedb;
+package queuedb.Objects;
 
 /**
  * Document to extend, holds the ID and generation.
