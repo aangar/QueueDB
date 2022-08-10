@@ -12,10 +12,9 @@ import queuedb.DatabaseParser;
 import queuedb.Objects.Person;
 
 public class PersonDAO extends BaseDAO{
-    private final DatabaseParser<Person> personParser;
 
     public PersonDAO(String DIR) {
-        this.personParser = new DatabaseParser<Person>(Person.class);
+        this.datbaseParser = new DatabaseParser<Person>(Person.class);
         if (!DIR.isEmpty() || DIR != null) {
             new File(DIR).mkdir();
             this.DIR_TO_COLLECTION = DIR;
