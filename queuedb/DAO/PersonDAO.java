@@ -16,7 +16,7 @@ public class PersonDAO extends BaseDAO{
 
     public PersonDAO(String DIR) {
         if (!DIR.isEmpty() || DIR != null) {
-            new File(DIR).mkdir();
+            new File(DIR).mkdirs();
             this.DIR_TO_COLLECTION = DIR;
         }
         this.dbParser = new DatabaseParser<Person>(Person.class, this.DIR_TO_COLLECTION);
