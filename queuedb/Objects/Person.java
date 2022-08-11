@@ -14,7 +14,7 @@ public class Person extends DatabaseDocument {
         this.age = age;
     }
 
-    public void setName(String name){ 
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -32,11 +32,17 @@ public class Person extends DatabaseDocument {
 
     public void setParsedProperty(String property, String val) {
         switch (property) {
-            case "name": this.setName(val);
+            case "id": {
+                this.setId(val);
+            }
+            case "name":
+                this.setName(val);
                 break;
-            case "age": this.setAge(Integer.parseInt(val));
+            case "age":
+                this.setAge(Integer.parseInt(val));
                 break;
-            default: System.err.println("Property name not recognized for Person.");
+            default:
+                System.err.println("Property name not recognized for Person: " + property);
         }
     }
 
