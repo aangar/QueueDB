@@ -6,24 +6,28 @@ import java.io.File;
  * The BaseTest class
  */
 public class BaseTest {
-    /**Color for a successful test */
+    /** Color for a successful test */
     public final String SUCCESS_COLOR = "\u001B[32m";
-    /**Color for a failing test */
+    /** Color for a failing test */
     public final String FAIL_COLOR = "\u001B[31m";
-    /**reset color??? */
+    /** reset color??? */
     public final String ANSI_RESET = "\u001B[0m";
-    /**The directory to the testing collection. */
+    /** The directory to the testing collection. */
     public String TEST_COLLECTION_DIR;
-    /**The test File name. just for output reasons :D */
+    /** The test File name. just for output reasons :D */
     public String TestFileName;
 
-    public void runTests() {
-        System.out.println("Method not configured for " + this.TestFileName);
+    public void runTests(Class<?> clazz) {
+        this.clearTestCollection();
+        new AutoTestRunner<>(clazz, this.TEST_COLLECTION_DIR);
+        this.removeTestCollection();
     }
 
     /**
      * Logs the result to the console for test status.
-     * @param result the result of the test. Set by the user, must output to a boolean.
+     * 
+     * @param result   the result of the test. Set by the user, must output to a
+     *                 boolean.
      * @param testName the name of the test.
      */
     public void logTestResult(boolean result, String testName) {

@@ -11,9 +11,9 @@ import queuedb.DAO.tests.SampleDocumentDAOTest;
 public class QueueDBTest {
     public static void runTests(String dir) {
         SampleDocumentDAOTest sampDocDAOTest = new SampleDocumentDAOTest(dir + "sample-documents/test/");
-        sampDocDAOTest.runTests();
+        sampDocDAOTest.runTests(SampleDocumentDAOTest.class);
         System.out.println(" ");
         PersonDAOTest personDAOTest = new PersonDAOTest(dir + "persons/test/");
-        personDAOTest.runTests();
+        personDAOTest.runTests(PersonDAOTest.class);
     }
 }

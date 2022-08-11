@@ -11,7 +11,7 @@ import java.util.Queue;
 import queuedb.DatabaseParser;
 import queuedb.Objects.Person;
 
-public class PersonDAO extends BaseDAO{
+public class PersonDAO extends BaseDAO {
     private final DatabaseParser<Person> dbParser;
 
     public PersonDAO(String DIR) {
@@ -20,6 +20,31 @@ public class PersonDAO extends BaseDAO{
             this.DIR_TO_COLLECTION = DIR;
         }
         this.dbParser = new DatabaseParser<Person>(Person.class, this.DIR_TO_COLLECTION);
+    }
+
+    public List<Person> findAll() {
+        return this.dbParser.findAll();
+    }
+
+    public boolean saveOne(Person doc) {
+        if (doc.getId() == null || doc.getId().isEmpty()) {
+            doc.generateId();
+        }
+        try {
+            FileWriter writer = new FileWriter(
+                    this.DIR_TO_COLLECTION + "Person_" + doc.getName() + "_" + doc.getId() + ".json");
+            writer.write("{\n");
+            writer.write(String.format("   \"id\": \"%s\",\n", doc.getId()));
+            writer.write(String.format("   \"name\": \"%s\",\n", doc.getName()));
+            writer.write(String.format("   \"age\": \"%s\"\n", doc.getAge()));
+            writer.write("}");
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("damn there was an error");
+            System.out.println(e);
+            return false;
+        }
+        return true;
     }
 
     public List<Person> savePersons(List<Person> docs) {

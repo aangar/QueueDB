@@ -11,9 +11,8 @@ import java.util.stream.Collectors;
 import queuedb.DAO.SampleDocumentDAO;
 import queuedb.Objects.SampleDocument;
 
-public class SampleDocumentDAOTest extends BaseTest{
+public class SampleDocumentDAOTest extends BaseTest {
     public final SampleDocumentDAO sampDocDAO;
-
 
     public SampleDocumentDAOTest(String dir) {
         this.sampDocDAO = new SampleDocumentDAO(dir);
@@ -21,18 +20,10 @@ public class SampleDocumentDAOTest extends BaseTest{
         this.TestFileName = "SampleDocumentDAOTest";
     }
 
-    public void runTests() {
-        this.clearTestCollection();
-        test_save();
-        test_saveOne();
-        test_findAll();
-        this.removeTestCollection();
-    }
-
     /**
      * tests the save method of the DAO.
      */
-    private void test_save() {
+    public void test_save() {
         List<SampleDocument> toSaveDocuments = List
                 .of("ALPINE_TESTDOC", "BRECA_TESTDOC", "CACHE_TESTDOC", "DESPIAN_TESTDOC")
                 .stream()
@@ -44,7 +35,7 @@ public class SampleDocumentDAOTest extends BaseTest{
         this.clearTestCollection();
     }
 
-    private void test_saveOne() {
+    public void test_saveOne() {
         SampleDocument document = new SampleDocument("TETRACORE_TESTDOC", Instant.now());
         boolean saved = this.sampDocDAO.saveOne(document);
 
@@ -53,7 +44,7 @@ public class SampleDocumentDAOTest extends BaseTest{
         this.clearTestCollection();
     }
 
-    private void test_findAll() {
+    public void test_findAll() {
         List<SampleDocument> toSaveDocuments = List
                 .of("ALPINE_TESTDOC", "BRECA_TESTDOC", "CACHE_TESTDOC", "DESPIAN_TESTDOC")
                 .stream()
