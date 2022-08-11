@@ -1,6 +1,7 @@
 package queuedb;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -8,6 +9,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import queuedb.Objects.DatabaseDocument;
 
@@ -35,12 +38,18 @@ public class DatabaseParser<T extends DatabaseDocument> {
     private List<String> fieldNames;
 
     /**
+     * Name is self explanatory. Come on now.
+     */
+    private String DIR_TO_COLLECTION;
+
+    /**
      * Default constructor for the DatabaseParser.
      * 
      * @param clazz the target class.
      */
-    public DatabaseParser(Class<T> clazz) {
+    public DatabaseParser(Class<T> clazz, String dir) {
         this.clazz = clazz;
+        this.DIR_TO_COLLECTION = dir;
     }
 
     /**
@@ -77,6 +86,7 @@ public class DatabaseParser<T extends DatabaseDocument> {
      * @return the parsed file into the target object.
      */
     public T readFile(String file) {
+        this.returnable = null;
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -100,10 +110,28 @@ public class DatabaseParser<T extends DatabaseDocument> {
             }
             fr.close();
         } catch (IOException e) {
-            System.out.println("there was an error. uhg.");
+            System.out.println("There was an error parsing a document.");
             System.out.println(e);
         }
 
         return this.returnable;
+    }
+
+    /**
+     * Finds all documents in the collection.
+     * 
+     * @return found documents.
+     */
+    public List<T> findAll() {
+        List<String> documents = List.of(new File(this.DIR_TO_COLLECTION).list());
+        if (documents.isEmpty()) {
+            System.out.println("No documents in collection.");
+            return new ArrayList<>();
+        }
+
+        return documents.stream().map(doc -> {
+            this.readFile(this.DIR_TO_COLLECTION + doc);
+            return this.returnable;
+        }).collect(Collectors.toList());
     }
 }

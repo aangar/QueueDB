@@ -14,6 +14,7 @@ import queuedb.Objects.SampleDocument;
  * SampleDocumentDAO Class
  */
 public class SampleDocumentDAO extends BaseDAO {
+    private final DatabaseParser<SampleDocument> dbParser;
 
     /**
      * Default constructor.
@@ -21,11 +22,46 @@ public class SampleDocumentDAO extends BaseDAO {
      * @param DIR the directory path to the collection
      */
     public SampleDocumentDAO(String DIR) {
-        this.datbaseParser = new DatabaseParser<SampleDocument>(SampleDocument.class);
         if (!DIR.isEmpty() || DIR != null) {
-            new File(DIR).mkdir();
+            if (!DIR.substring(DIR.length() - 1).equals("/")) {
+                DIR = DIR + "/";
+            }
+            new File(DIR).mkdirs();
             this.DIR_TO_COLLECTION = DIR;
         }
+        this.dbParser = new DatabaseParser<SampleDocument>(SampleDocument.class, this.DIR_TO_COLLECTION);
+    }
+
+    /**
+     * Finds all SampleDocuments
+     * 
+     * @return a list of found SampleDocuments
+     */
+    public List<SampleDocument> findAll() {
+        return this.dbParser.findAll();
+    }
+
+    public boolean saveOne(SampleDocument doc) {
+        if (doc.getId() == null || doc.getId().isEmpty()) {
+            doc.generateId();
+        }
+        try {
+            FileWriter writer = new FileWriter(
+                    this.DIR_TO_COLLECTION + "SampleDocument_" + doc.getName() + "_" + doc.getId()
+                            + ".json");
+            writer.write("{\n");
+            writer.write(String.format("   \"id\": \"%s\",\n", doc.getId()));
+            writer.write(String.format("   \"name\": \"%s\",\n", doc.getName()));
+            writer.write(String.format("   \"generationDate\": \"%s\"\n", doc.getGenerationDate()));
+            writer.write("}");
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("damn there was an error");
+            System.out.println(e);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -44,7 +80,8 @@ public class SampleDocumentDAO extends BaseDAO {
             }
             try {
                 FileWriter writer = new FileWriter(
-                        this.DIR_TO_COLLECTION + "SampleDocument_" + sampDoc.getName() + "_" + sampDoc.getId() + ".json");
+                        this.DIR_TO_COLLECTION + "SampleDocument_" + sampDoc.getName() + "_" + sampDoc.getId()
+                                + ".json");
                 writer.write("{\n");
                 writer.write(String.format("   \"id\": \"%s\",\n", sampDoc.getId()));
                 writer.write(String.format("   \"name\": \"%s\",\n", sampDoc.getName()));

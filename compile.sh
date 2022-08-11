@@ -28,7 +28,7 @@ delete_java_classes() {
         str="$file"
         len=${#str}
         end=$(($len-5));
-        ext=$( echo "$file" |cut -c$end-$len )
+        ext=$( echo "$file" |cut -c"$end"-"$len" )
         if [[ "$ext" == ".class" ]]
         then
             rm "./$file" 
@@ -53,5 +53,6 @@ clear
 java Source "$FLAG" "$PWD"
 
 delete_java_classes queuedb/DAO
+delete_java_classes queuedb/DAO/tests
 delete_java_classes queuedb/Objects
 delete_java_classes queuedb

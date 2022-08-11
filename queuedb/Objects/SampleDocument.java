@@ -11,11 +11,11 @@ public class SampleDocument extends DatabaseDocument {
     private String name;
     private Instant generationDate;
 
-    SampleDocument() {
+    public SampleDocument() {
         generateId();
     }
 
-    SampleDocument(String name, Instant genDate) {
+    public SampleDocument(String name, Instant genDate) {
         generateId();
         this.name = name;
         this.generationDate = genDate;
