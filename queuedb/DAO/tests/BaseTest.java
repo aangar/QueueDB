@@ -17,6 +17,10 @@ public class BaseTest {
     /**The test File name. just for output reasons :D */
     public String TestFileName;
 
+    public void runTests() {
+        System.out.println("Method not configured for " + this.TestFileName);
+    }
+
     /**
      * Logs the result to the console for test status.
      * @param result the result of the test. Set by the user, must output to a boolean.
