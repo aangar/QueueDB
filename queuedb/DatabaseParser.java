@@ -79,34 +79,6 @@ public class DatabaseParser<T extends DatabaseDocument> {
 
     }
 
-        /**
-     * Builds a class for the target document to convert to. This must be called
-     * before trying to set fields parsed.
-     */
-    private Optional<T> createDraftClazz() {
-        Optional<T> draft = Optional.ofNullable(null);
-        try {
-            Constructor<?> s[] = this.clazz.getDeclaredConstructors();
-            Field[] fields = this.clazz.getDeclaredFields();
-            List<String> allowedFields = new ArrayList<>();
-            allowedFields.add("id");
-            for (Field f : fields) {
-                String name = f.toString();
-                int end = name.lastIndexOf(".") + 1;
-                allowedFields.add(name.substring(end, name.length()));
-            }
-            draft = Optional.of((T) s[0].newInstance());
-        } catch (InvocationTargetException nsm) {
-
-        } catch (InstantiationException ie) {
-
-        } catch (IllegalAccessException iae) {
-
-        }
-
-        return draft;
-    }
-
     /**
      * Reads the file from the filename, and returns the parsed object.
      * 
@@ -114,6 +86,7 @@ public class DatabaseParser<T extends DatabaseDocument> {
      * @return the parsed file into the target object.
      */
     public T readFile(String file) {
+        this.returnable = null;
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -137,7 +110,7 @@ public class DatabaseParser<T extends DatabaseDocument> {
             }
             fr.close();
         } catch (IOException e) {
-            System.out.println("there was an error. uhg.");
+            System.out.println("There was an error parsing a document.");
             System.out.println(e);
         }
 
@@ -146,21 +119,19 @@ public class DatabaseParser<T extends DatabaseDocument> {
 
     /**
      * Finds all documents in the collection.
+     * 
      * @return found documents.
      */
     public List<T> findAll() {
-        File collection = new File(this.DIR_TO_COLLECTION);
-        boolean doesCollectionExist = collection.mkdir();
-        if (!doesCollectionExist) {
-            System.out.println("Collection does not exist.");
-            return new ArrayList<T>();
+        List<String> documents = List.of(new File(this.DIR_TO_COLLECTION).list());
+        if (documents.isEmpty()) {
+            System.out.println("No documents in collection.");
+            return new ArrayList<>();
         }
 
-        List<String> fileNames = List.of(collection.list());
-        return fileNames.stream().map(x -> {
-            Optional<T> draft = Optional.ofNullable(null);
-            draft = Optional.ofNullable(this.readFile(this.DIR_TO_COLLECTION + x));
-            return draft.get();
+        return documents.stream().map(doc -> {
+            this.readFile(this.DIR_TO_COLLECTION + doc);
+            return this.returnable;
         }).collect(Collectors.toList());
     }
 }

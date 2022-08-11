@@ -1,7 +1,6 @@
 package queuedb.DAO;
 
 import java.io.File;
-import queuedb.DatabaseParser;
 
 public class BaseDAO {
     public String DIR_TO_COLLECTION;
