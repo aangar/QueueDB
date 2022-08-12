@@ -2,18 +2,10 @@ package queuedb.DAO;
 
 import java.io.File;
 
-/**
- * Public BaseDAO for other DAO's to extend.
- */
 public class BaseDAO {
-    /**The path to the collection. */
     public String DIR_TO_COLLECTION;
 
-    /**
-     * Clears the DAOs' current collection, then removes it.
-     * @param collectionName For logging purposes, its the name of the collection.
-     */
-    public void clearAndRemoveCollection(String collectionName) {
+    public void clearCollection(String collectionName) {
         if (this.DIR_TO_COLLECTION == null || this.DIR_TO_COLLECTION.isEmpty()) {
             System.err.println("Collection Directory not specified, unable to clear.");
             return;
