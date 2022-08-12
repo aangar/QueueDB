@@ -11,9 +11,17 @@ import java.util.stream.Collectors;
 import queuedb.DAO.SampleDocumentDAO;
 import queuedb.Objects.SampleDocument;
 
+/**
+ * SampleDocumentDAO Test class.
+ */
 public class SampleDocumentDAOTest extends BaseTest {
+    /**The testing SampleDocumentDAO. */
     public final SampleDocumentDAO sampDocDAO;
 
+    /**
+     * Default constructor for the Test.
+     * @param dir the directory to the testing collection.
+     */
     public SampleDocumentDAOTest(String dir) {
         this.sampDocDAO = new SampleDocumentDAO(dir);
         this.TEST_COLLECTION_DIR = dir;
@@ -32,18 +40,22 @@ public class SampleDocumentDAOTest extends BaseTest {
         List<SampleDocument> savedDocuments = this.sampDocDAO.saveDocuments(toSaveDocuments);
         List<SampleDocument> foundDocs = this.sampDocDAO.findAll();
         this.logTestResult(savedDocuments.size() == foundDocs.size(), "test_save");
-        this.clearTestCollection();
     }
 
+    /**
+     * Tests the save one method.
+     */
     public void test_saveOne() {
         SampleDocument document = new SampleDocument("TETRACORE_TESTDOC", Instant.now());
         boolean saved = this.sampDocDAO.saveOne(document);
 
         List<SampleDocument> foundDocs = this.sampDocDAO.findAll();
         this.logTestResult(saved && (foundDocs.size() == 1), "test_SaveOne");
-        this.clearTestCollection();
     }
 
+    /**
+     * tests the findAll method.
+     */
     public void test_findAll() {
         List<SampleDocument> toSaveDocuments = List
                 .of("ALPINE_TESTDOC", "BRECA_TESTDOC", "CACHE_TESTDOC", "DESPIAN_TESTDOC")
@@ -78,6 +90,5 @@ public class SampleDocumentDAOTest extends BaseTest {
 
         boolean result = (foundDocs.size() == filesInTest.length) && (filesInTest.length == toSaveDocuments.size());
         this.logTestResult(result, "test_findAll");
-        this.clearTestCollection();
     }
 }

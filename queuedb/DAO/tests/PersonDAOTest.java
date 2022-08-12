@@ -10,20 +10,34 @@ import java.util.stream.Collectors;
 import queuedb.DAO.PersonDAO;
 import queuedb.Objects.Person;
 
+/**
+ * PersonDAOTest class.
+ */
 public class PersonDAOTest extends BaseTest {
+    /**The testing PersonDAO */
     public final PersonDAO personDAO;
 
+    /**
+     * Default constructor.
+     * @param dir the path to the testing directory.
+     */
     public PersonDAOTest(String dir) {
         this.personDAO = new PersonDAO(dir);
         this.TEST_COLLECTION_DIR = dir;
         this.TestFileName = "PersonDAOTest";
     }
 
+    /**
+     * tests the saveOne method.
+     */
     public void test_saveOne() {
         Person person = new Person("GRAPHITE_TESTDOC", 22);
         this.logTestResult(this.personDAO.saveOne(person), "test_saveOne");
     }
 
+    /**
+     * tests the savePersons method.
+     */
     public void test_SaveMulti() {
         List<Person> docs = List.of("Riley", "Alpine", "Tetca", "Doyin", "Trilek")
                 .stream()
@@ -32,6 +46,9 @@ public class PersonDAOTest extends BaseTest {
         this.logTestResult(this.personDAO.savePersons(docs).size() == docs.size(), "test_SaveMulti");
     }
 
+    /**
+     * tests the findAll method.
+     */
     public void test_findAll() {
         List<Person> docs = List.of("Riley", "Alpine", "Tetca", "Doyin", "Trilek")
                 .stream()
