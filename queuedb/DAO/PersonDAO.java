@@ -11,18 +11,9 @@ import java.util.Queue;
 import queuedb.DatabaseParser;
 import queuedb.Objects.Person;
 
-/**
- * DAO for interaction with "Person" documents.
- * @author aangar, 2022.
- */
 public class PersonDAO extends BaseDAO {
-    /**The parser to write to the database. */
     private final DatabaseParser<Person> dbParser;
 
-    /**
-     * Default constructor.
-     * @param DIR the directory to the collection as a string.
-     */
     public PersonDAO(String DIR) {
         if (!DIR.isEmpty() || DIR != null) {
             new File(DIR).mkdirs();
@@ -31,19 +22,10 @@ public class PersonDAO extends BaseDAO {
         this.dbParser = new DatabaseParser<Person>(Person.class, this.DIR_TO_COLLECTION);
     }
 
-    /**
-     * Finds all the Person documents in the collection.
-     * @return a list of the found documents.
-     */
     public List<Person> findAll() {
         return this.dbParser.findAll();
     }
 
-    /**
-     * Saves one person document to the collection.
-     * @param doc the document to save.
-     * @return <code>true</code> if it was saved, <code>false</code> otherwise.
-     */
     public boolean saveOne(Person doc) {
         if (doc.getId() == null || doc.getId().isEmpty()) {
             doc.generateId();
@@ -65,11 +47,6 @@ public class PersonDAO extends BaseDAO {
         return true;
     }
 
-    /**
-     * Saves multiple person documents.
-     * @param docs the documents to save.
-     * @return a list of the persons saved.
-     */
     public List<Person> savePersons(List<Person> docs) {
         Queue<Person> queue = new LinkedList<>(docs);
         List<Person> saved = new ArrayList<>();

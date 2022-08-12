@@ -36,16 +36,6 @@ public class DatabaseDocument {
         this.id = UUID;
     }
 
-    /**
-     * Method that sets the properties parsed from the database document. 
-     * Will use a switch-case for the property name, and then calls a setter method. 
-     * There is no casting by default, so make sure to do that in the called setter.
-     * @implNote This must be an override method to work.
-     * If the error "No conversion body was set, please do so.",
-     * this means the override was never set and must be done for proper conversion.
-     * @param property String, the property name.
-     * @param val String, the value of the property, insensitive of cast type.
-     */
     public void setParsedProperty(String propName, String val) {
         System.err.println("No conversion body was set, please do so.");
     }

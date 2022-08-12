@@ -11,18 +11,10 @@ public class SampleDocument extends DatabaseDocument {
     private String name;
     private Instant generationDate;
 
-    /**
-     * Default empty constructor.
-     */
     public SampleDocument() {
         generateId();
     }
 
-    /**
-     * SampleDocument constructor with name and generation date.
-     * @param name String, name for the document.
-     * @param genDate Instant, generation date of the document.
-     */
     public SampleDocument(String name, Instant genDate) {
         generateId();
         this.name = name;
@@ -38,7 +30,10 @@ public class SampleDocument extends DatabaseDocument {
     }
 
     /**
-     * {@inheritDoc}}
+     * Override method to set parsed properties.
+     * 
+     * @param propName the parsed property name.
+     * @param val      the string value from the JSON file.
      */
     public void setParsedProperty(String propName, String val) {
         switch (propName) {
@@ -56,18 +51,10 @@ public class SampleDocument extends DatabaseDocument {
         }
     }
 
-    /**
-     * sets the name for the document
-     * @param name String, name.
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * sets the generation date.
-     * @param genDate Instant, generation date.
-     */
     public void setGenerationDate(String genDate) {
         this.generationDate = Instant.parse(genDate);
     }
