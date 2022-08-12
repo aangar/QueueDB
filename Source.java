@@ -1,7 +1,5 @@
 import java.io.File;
 import java.util.Optional;
-
-import binarytrees.BinaryTreeTest;
 import queuedb.QueueDBTest;
 
 /**
@@ -15,18 +13,8 @@ public class Source {
         final String DB_DIR_NAME = args[1] + "/queuedb/sampledb/";
         new File(DB_DIR_NAME).mkdir();
         if (flag.isPresent()) {
-            switch (flag.get()) {
-                case "tree": {
-                    BinaryTreeTest.runTestCases();
-                }
-                    break;
-                case "dynamic": {
-                    QueueDBTest.runTests(DB_DIR_NAME);
-                }
-                    break;
-
-                default:
-                    System.out.println("Flag unspecified or unrecognized.");
+            if (flag.get().equals("dynamic")) {
+                QueueDBTest.runTests(DB_DIR_NAME);
             }
         }
     }

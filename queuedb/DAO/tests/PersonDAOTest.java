@@ -22,7 +22,6 @@ public class PersonDAOTest extends BaseTest {
     public void test_saveOne() {
         Person person = new Person("GRAPHITE_TESTDOC", 22);
         this.logTestResult(this.personDAO.saveOne(person), "test_saveOne");
-        this.clearTestCollection();
     }
 
     public void test_SaveMulti() {
@@ -31,7 +30,6 @@ public class PersonDAOTest extends BaseTest {
                 .map(Person::generatePersonFromName)
                 .collect(Collectors.toList());
         this.logTestResult(this.personDAO.savePersons(docs).size() == docs.size(), "test_SaveMulti");
-        this.clearTestCollection();
     }
 
     public void test_findAll() {
@@ -65,6 +63,5 @@ public class PersonDAOTest extends BaseTest {
         List<Person> foundDocs = this.personDAO.findAll();
         boolean result = (foundDocs.size() == filesInTest.length) && (filesInTest.length == docs.size());
         this.logTestResult(result, "test_findAll");
-        this.clearTestCollection();
     }
 }
