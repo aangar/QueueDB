@@ -27,6 +27,10 @@ public class PersonDAO extends BaseDAO {
     }
 
     public boolean saveOne(Person doc) {
+        if (doc == null) {
+            System.err.println("Person cannot be null for saveOne!");
+            return false;
+        }
         if (doc.getId() == null || doc.getId().isEmpty()) {
             doc.generateId();
         }
@@ -48,6 +52,10 @@ public class PersonDAO extends BaseDAO {
     }
 
     public List<Person> savePersons(List<Person> docs) {
+        if (docs == null || docs.isEmpty()) {
+            System.err.println("List of Persons cannot be empty for savePersons!");
+            return new ArrayList<>();
+        }
         Queue<Person> queue = new LinkedList<>(docs);
         List<Person> saved = new ArrayList<>();
         while (queue.size() > 0) {
