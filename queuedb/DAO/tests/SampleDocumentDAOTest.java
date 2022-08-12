@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -35,6 +36,22 @@ public class SampleDocumentDAOTest extends BaseTest {
         this.clearTestCollection();
     }
 
+    /**
+     * ensures the passing in an empty list will return an empty list.
+     */
+    public void test_save_empty() {
+        List<SampleDocument> docs = this.sampDocDAO.saveDocuments(new ArrayList<>());
+        this.logTestResult(docs.size() < 1, "test_save_null");
+    }
+
+    /**
+     * ensures that passing a null will not save.
+     */
+    public void test_save_null() {
+        List<SampleDocument> docs = this.sampDocDAO.saveDocuments(null);
+        this.logTestResult(docs.size() < 1, "test_save_null");
+    }
+
     public void test_saveOne() {
         SampleDocument document = new SampleDocument("TETRACORE_TESTDOC", Instant.now());
         boolean saved = this.sampDocDAO.saveOne(document);
@@ -42,6 +59,13 @@ public class SampleDocumentDAOTest extends BaseTest {
         List<SampleDocument> foundDocs = this.sampDocDAO.findAll();
         this.logTestResult(saved && (foundDocs.size() == 1), "test_SaveOne");
         this.clearTestCollection();
+    }
+
+    /**
+     * ensures that trying to save a null document will not work.
+     */
+    public void test_saveOne_null() {
+        this.logTestResult(!this.sampDocDAO.saveOne(null), "test_saveOne_null");
     }
 
     public void test_findAll() {

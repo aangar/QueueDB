@@ -4,6 +4,7 @@ import java.util.List;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -24,12 +25,33 @@ public class PersonDAOTest extends BaseTest {
         this.logTestResult(this.personDAO.saveOne(person), "test_saveOne");
     }
 
+    /**
+     * ensures saving a null document will fail.
+     */
+    public void test_saveOne_null() {
+        this.logTestResult(!this.personDAO.saveOne(null), "test_saveOne_null");
+    }
+
     public void test_SaveMulti() {
         List<Person> docs = List.of("Riley", "Alpine", "Tetca", "Doyin", "Trilek")
                 .stream()
                 .map(Person::generatePersonFromName)
                 .collect(Collectors.toList());
         this.logTestResult(this.personDAO.savePersons(docs).size() == docs.size(), "test_SaveMulti");
+    }
+
+    /**
+     * ensures that trying to save an empty list will not work.
+     */
+    public void test_SaveMulti_Empty() {
+        this.logTestResult(this.personDAO.savePersons(new ArrayList<>()).size() < 1, "test_SaveMulti_Empty");
+    }
+
+        /**
+     * ensures that trying to save a null param will not work.
+     */
+    public void test_SaveMulti_Null() {
+        this.logTestResult(this.personDAO.savePersons(null).size() < 1, "test_SaveMulti_Null");
     }
 
     public void test_findAll() {

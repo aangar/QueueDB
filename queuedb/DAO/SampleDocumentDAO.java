@@ -42,6 +42,10 @@ public class SampleDocumentDAO extends BaseDAO {
     }
 
     public boolean saveOne(SampleDocument doc) {
+        if (doc == null) {
+            System.err.println("SampleDocument cannot be null for saveOne!");
+            return false;
+        }
         if (doc.getId() == null || doc.getId().isEmpty()) {
             doc.generateId();
         }
@@ -71,6 +75,10 @@ public class SampleDocumentDAO extends BaseDAO {
      * @return the list of saved SampleDocuments.
      */
     public List<SampleDocument> saveDocuments(List<SampleDocument> docs) {
+        if (docs == null || docs.isEmpty()) {
+            System.err.println("List of SampleDocuments cannot be empty for saveDocuments!");
+            return new ArrayList<>();
+        }
         Queue<SampleDocument> queue = new LinkedList<SampleDocument>(docs);
         List<SampleDocument> saved = new ArrayList<>();
         while (queue.size() > 0) {
