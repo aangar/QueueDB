@@ -1,4 +1,3 @@
-FLAG="$1"
 BASE_DIR="$PWD"
 
 compile_java_files() {
@@ -37,19 +36,15 @@ delete_java_classes() {
     cd "$BASE_DIR"   
 }
 
-if [[ "$FLAG" == "tree" ]]
-then
-    compile_java_files "./binarytrees"
-elif [[ "$FLAG" == "dynamic" ]]
-then
-    compile_java_files queuedb/DAO
-    compile_java_files queuedb/Objects
-    compile_java_files queuedb
-fi
+
+compile_java_files queuedb/DAO
+compile_java_files queuedb/Objects
+compile_java_files queuedb
+
 
 cd "$BASE_DIR"
 javac Source.java
-java Source "$FLAG" "$PWD"
+java Source "$PWD"
 
 delete_java_classes queuedb/DAO
 delete_java_classes queuedb/DAO/tests

@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.Optional;
 import queuedb.QueueDBTest;
 
 /**
@@ -8,14 +7,14 @@ import queuedb.QueueDBTest;
  * @author aangar, 2022
  */
 public class Source {
-    public static void main(String[] args) {
-        Optional<String> flag = Optional.ofNullable(args[0]);
-        final String DB_DIR_NAME = args[1] + "/queuedb/sampledb/";
-        new File(DB_DIR_NAME).mkdir();
-        if (flag.isPresent()) {
-            if (flag.get().equals("dynamic")) {
-                QueueDBTest.runTests(DB_DIR_NAME);
-            }
+    public static void main(String[] args) throws Throwable{
+        if (args.length > 0){ 
+            final String DB_DIR_NAME = args[0] + "/queuedb/sampledb/";
+            new File(DB_DIR_NAME).mkdir();
+            QueueDBTest.runTests(DB_DIR_NAME);
+        }
+        if (args.length < 1) {
+            throw new Throwable("DB Directory was not specified, unable to start.");
         }
     }
 }
