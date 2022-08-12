@@ -48,15 +48,18 @@ public class AutoTestRunner<T> {
      */
     private void runTestMethods() {
         T obj = generateInstance();
+        BaseTest bt = new BaseTest();
         Method[] methods = obj.getClass().getDeclaredMethods();
         for (Method m : methods)
             try {
                 m.invoke(obj);
+                bt.TEST_COLLECTION_DIR = this.testingPath;
+                bt.clearTestCollection();
             } catch (InvocationTargetException nsm) {
 
             } catch (IllegalAccessException iae) {
 
-            }
+        }
     }
 
     /**

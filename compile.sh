@@ -49,7 +49,6 @@ fi
 
 cd "$BASE_DIR"
 javac Source.java
-clear
 java Source "$FLAG" "$PWD"
 
 delete_java_classes queuedb/DAO
