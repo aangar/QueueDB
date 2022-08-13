@@ -1,11 +1,13 @@
 package queuedb.Objects;
 
+import java.io.Serializable;
+
 /**
  * Document to extend, holds the ID and generation.
  * 
  * @author aangar, 2022
  */
-public class DatabaseDocument {
+public class DatabaseDocument implements Serializable {
     public String id;
 
     public String getId() {

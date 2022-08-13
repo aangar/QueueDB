@@ -47,19 +47,17 @@ public class BaseTest {
             System.err.println("Collection Directory not specified, unable to clear.");
             return;
         }
-        File baseDir = new File(TEST_COLLECTION_DIR);
+        File baseDir = new File(this.TEST_COLLECTION_DIR);
         String[] existingFiles = baseDir.list();
         if (existingFiles.length < 1) {
             return;
         }
         if (existingFiles.length >= 1) {
             for (String file : existingFiles) {
-                if (file.equals("test")) {
-                    continue;
-                }
-                new File(TEST_COLLECTION_DIR + file).delete();
+                new File(this.TEST_COLLECTION_DIR + file).delete();
             }
         }
+        System.out.println("Files found after test: " + existingFiles.length);
     }
 
     /**

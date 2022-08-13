@@ -1,11 +1,10 @@
 package queuedb.DAO;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import queuedb.DatabaseParser;
 import queuedb.Objects.SampleDocument;
@@ -41,31 +40,32 @@ public class SampleDocumentDAO extends BaseDAO {
         return this.dbParser.findAll();
     }
 
-    public boolean saveOne(SampleDocument doc) {
+    /**
+     * Save one method.
+     * 
+     * @param doc SampleDocument, the object to save.
+     * @return <code>true</code> if written, <code>false</code> otherwise.
+     */
+    public Optional<SampleDocument> saveOne(SampleDocument doc) {
         if (doc == null) {
-            System.err.println("SampleDocument cannot be null for saveOne!");
-            return false;
+            System.err.println("Sampledocument cannot be null.");
+            return Optional.empty();
         }
-        if (doc.getId() == null || doc.getId().isEmpty()) {
-            doc.generateId();
-        }
-        try {
-            FileWriter writer = new FileWriter(
-                    this.DIR_TO_COLLECTION + "SampleDocument_" + doc.getName() + "_" + doc.getId()
-                            + ".json");
-            writer.write("{\n");
-            writer.write(String.format("   \"id\": \"%s\",\n", doc.getId()));
-            writer.write(String.format("   \"name\": \"%s\",\n", doc.getName()));
-            writer.write(String.format("   \"generationDate\": \"%s\"\n", doc.getGenerationDate()));
-            writer.write("}");
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("damn there was an error");
-            System.out.println(e);
-            return false;
-        }
+        return this.dbParser.writeFile(doc);
+    }
 
-        return true;
+    /**
+     * Finds a file by the id.
+     * 
+     * @param fileId the ID of the file.
+     * @return an Optional of the result.
+     */
+    public Optional<SampleDocument> findById(String fileId) {
+        if (fileId == null || fileId.isEmpty()) {
+            System.err.println("FileID cannot be empty.");
+            return Optional.empty();
+        }
+        return this.dbParser.readFile(fileId);
     }
 
     /**
@@ -86,20 +86,9 @@ public class SampleDocumentDAO extends BaseDAO {
             if (sampDoc.getId() == null || sampDoc.getId().isEmpty()) {
                 sampDoc.generateId();
             }
-            try {
-                FileWriter writer = new FileWriter(
-                        this.DIR_TO_COLLECTION + "SampleDocument_" + sampDoc.getName() + "_" + sampDoc.getId()
-                                + ".json");
-                writer.write("{\n");
-                writer.write(String.format("   \"id\": \"%s\",\n", sampDoc.getId()));
-                writer.write(String.format("   \"name\": \"%s\",\n", sampDoc.getName()));
-                writer.write(String.format("   \"generationDate\": \"%s\"\n", sampDoc.getGenerationDate()));
-                writer.write("}");
-                writer.close();
-                saved.add(sampDoc);
-            } catch (IOException e) {
-                System.out.println("damn there was an error");
-                System.out.println(e);
+            Optional<SampleDocument> didSave = this.dbParser.writeFile(sampDoc);
+            if (didSave.isPresent()) {
+                saved.add(didSave.get());
             }
         }
         return saved;

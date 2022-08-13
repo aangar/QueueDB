@@ -1,11 +1,10 @@
 package queuedb.DAO;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 
 import queuedb.DatabaseParser;
@@ -26,29 +25,12 @@ public class PersonDAO extends BaseDAO {
         return this.dbParser.findAll();
     }
 
-    public boolean saveOne(Person doc) {
+    public Optional<Person> saveOne(Person doc) {
         if (doc == null) {
             System.err.println("Person cannot be null for saveOne!");
-            return false;
+            return Optional.empty();
         }
-        if (doc.getId() == null || doc.getId().isEmpty()) {
-            doc.generateId();
-        }
-        try {
-            FileWriter writer = new FileWriter(
-                    this.DIR_TO_COLLECTION + "Person_" + doc.getName() + "_" + doc.getId() + ".json");
-            writer.write("{\n");
-            writer.write(String.format("   \"id\": \"%s\",\n", doc.getId()));
-            writer.write(String.format("   \"name\": \"%s\",\n", doc.getName()));
-            writer.write(String.format("   \"age\": \"%s\"\n", doc.getAge()));
-            writer.write("}");
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("damn there was an error");
-            System.out.println(e);
-            return false;
-        }
-        return true;
+        return this.dbParser.writeFile(doc);
     }
 
     public List<Person> savePersons(List<Person> docs) {
@@ -63,19 +45,9 @@ public class PersonDAO extends BaseDAO {
             if (person.getId() == null || person.getId().isEmpty()) {
                 person.generateId();
             }
-            try {
-                FileWriter writer = new FileWriter(
-                        this.DIR_TO_COLLECTION + "Person_" + person.getName() + "_" + person.getId() + ".json");
-                writer.write("{\n");
-                writer.write(String.format("   \"id\": \"%s\",\n", person.getId()));
-                writer.write(String.format("   \"name\": \"%s\",\n", person.getName()));
-                writer.write(String.format("   \"age\": \"%s\"\n", person.getAge()));
-                writer.write("}");
-                writer.close();
-                saved.add(person);
-            } catch (IOException e) {
-                System.out.println("damn there was an error");
-                System.out.println(e);
+            Optional<Person> didSave = this.dbParser.writeFile(person);
+            if (didSave.isPresent()) {
+                saved.add(didSave.get());
             }
         }
         return saved;

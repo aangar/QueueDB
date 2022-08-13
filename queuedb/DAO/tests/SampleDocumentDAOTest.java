@@ -1,14 +1,15 @@
 package queuedb.DAO.tests;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.stream.Collectors;
+
+import queuedb.DatabaseParser;
 import queuedb.DAO.SampleDocumentDAO;
 import queuedb.Objects.SampleDocument;
 
@@ -33,7 +34,6 @@ public class SampleDocumentDAOTest extends BaseTest {
         List<SampleDocument> savedDocuments = this.sampDocDAO.saveDocuments(toSaveDocuments);
         List<SampleDocument> foundDocs = this.sampDocDAO.findAll();
         this.logTestResult(savedDocuments.size() == foundDocs.size(), "test_save");
-        this.clearTestCollection();
     }
 
     /**
@@ -54,18 +54,17 @@ public class SampleDocumentDAOTest extends BaseTest {
 
     public void test_saveOne() {
         SampleDocument document = new SampleDocument("TETRACORE_TESTDOC", Instant.now());
-        boolean saved = this.sampDocDAO.saveOne(document);
+        Optional<SampleDocument> saved = this.sampDocDAO.saveOne(document);
 
         List<SampleDocument> foundDocs = this.sampDocDAO.findAll();
-        this.logTestResult(saved && (foundDocs.size() == 1), "test_SaveOne");
-        this.clearTestCollection();
+        this.logTestResult(saved.isPresent() && (foundDocs.size() == 1), "test_SaveOne");
     }
 
     /**
      * ensures that trying to save a null document will not work.
      */
     public void test_saveOne_null() {
-        this.logTestResult(!this.sampDocDAO.saveOne(null), "test_saveOne_null");
+        this.logTestResult(this.sampDocDAO.saveOne(null).isEmpty(), "test_saveOne_null");
     }
 
     public void test_findAll() {
@@ -75,33 +74,24 @@ public class SampleDocumentDAOTest extends BaseTest {
                 .map(SampleDocument::convertToSampleDoc)
                 .collect(Collectors.toList());
         Queue<SampleDocument> queue = new LinkedList<SampleDocument>(toSaveDocuments);
+        DatabaseParser<SampleDocument> db = new DatabaseParser<>(SampleDocument.class, this.TEST_COLLECTION_DIR);
+        List<SampleDocument> saved = new ArrayList<>();
 
         while (queue.size() > 0) {
             SampleDocument sampDoc = queue.poll();
             if (sampDoc.getId() == null || sampDoc.getId().isEmpty()) {
                 sampDoc.generateId();
             }
-            try {
-                FileWriter writer = new FileWriter(
-                        this.TEST_COLLECTION_DIR + "SampleDocument_" + sampDoc.getName() + "_" + sampDoc.getId()
-                                + ".json");
-                writer.write("{\n");
-                writer.write(String.format("   \"id\": \"%s\",\n", sampDoc.getId()));
-                writer.write(String.format("   \"name\": \"%s\",\n", sampDoc.getName()));
-                writer.write(String.format("   \"generationDate\": \"%s\"\n", sampDoc.getGenerationDate()));
-                writer.write("}");
-                writer.close();
-            } catch (IOException e) {
-                System.out.println("damn there was an error");
-                System.out.println(e);
+            Optional<SampleDocument> didSave = db.writeFile(sampDoc);
+            if (didSave.isPresent()) {
+                saved.add(sampDoc);
             }
         }
 
         String[] filesInTest = new File(this.TEST_COLLECTION_DIR).list();
         List<SampleDocument> foundDocs = this.sampDocDAO.findAll();
 
-        boolean result = (foundDocs.size() == filesInTest.length) && (filesInTest.length == toSaveDocuments.size());
+        boolean result = (foundDocs.size() == saved.size()) && (filesInTest.length == saved.size());
         this.logTestResult(result, "test_findAll");
-        this.clearTestCollection();
     }
 }
