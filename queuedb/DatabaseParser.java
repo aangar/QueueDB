@@ -2,8 +2,14 @@ package queuedb;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -82,39 +88,47 @@ public class DatabaseParser<T extends DatabaseDocument> {
     /**
      * Reads the file from the filename, and returns the parsed object.
      * 
-     * @param file the path to the file, absolute.
+     * @param fileId the ID of the document.
      * @return the parsed file into the target object.
      */
-    public T readFile(String file) {
-        this.returnable = null;
+    public Optional<T> readFile(String fileId) {
+        T object = null;
         try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            StringBuffer sb = new StringBuffer();
-            String line;
-            buildClazz();
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-                String trimmy = line.trim();
-                int ind = trimmy.indexOf("\"", 1);
-                if (ind > 0) {
-                    String propName = trimmy.substring(1, ind);
-                    if (this.fieldNames.contains(propName)) {
-                        int startQuoteInd = trimmy.indexOf("\"", ind + 1) + 1;
-                        int endQuoteInd = trimmy.indexOf("\"", startQuoteInd + 1);
-                        String val = trimmy.substring(startQuoteInd, endQuoteInd);
-                        this.returnable.setParsedProperty(propName, val);
-                    }
-                }
-                sb.append("\n");
-            }
-            fr.close();
-        } catch (IOException e) {
-            System.out.println("There was an error parsing a document.");
-            System.out.println(e);
+            FileInputStream FIS = new FileInputStream(new File(this.DIR_TO_COLLECTION + fileId));
+            ObjectInputStream OIS = new ObjectInputStream(FIS);
+            object = (T) OIS.readObject();
+            OIS.close();
+        } catch (FileNotFoundException FNFE) {
+            System.out.println(FNFE);
+        } catch (IOException IOE) {
+            System.out.println(IOE);
+        } catch (ClassNotFoundException CNFE) {
+            System.out.println(CNFE);
         }
+        return Optional.ofNullable(object);
+    }
 
-        return this.returnable;
+    /**
+     * Writes a file to the Database collection.
+     * 
+     * @param file the Object to write.
+     * @return an Optional of the result.
+     */
+    public Optional<T> writeFile(T file) {
+        if (file.getId() == null || file.getId().isEmpty()) {
+            file.generateId();
+        }
+        try {
+            String id = file.getId();
+            FileOutputStream FOS = new FileOutputStream(new File(this.DIR_TO_COLLECTION + id));
+            ObjectOutputStream OOS = new ObjectOutputStream(FOS);
+            OOS.writeObject(file);
+            OOS.close();
+        } catch (IOException IOE) {
+            System.out.println(IOE);
+            return Optional.empty();
+        }
+        return Optional.of(file);
     }
 
     /**
@@ -130,7 +144,7 @@ public class DatabaseParser<T extends DatabaseDocument> {
         }
 
         return documents.stream().map(doc -> {
-            this.readFile(this.DIR_TO_COLLECTION + doc);
+            this.readFile(doc);
             return this.returnable;
         }).collect(Collectors.toList());
     }
