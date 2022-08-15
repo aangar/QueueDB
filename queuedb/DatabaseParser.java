@@ -142,10 +142,11 @@ public class DatabaseParser<T extends DatabaseDocument> {
             System.out.println("No documents in collection.");
             return new ArrayList<>();
         }
-
         return documents.stream().map(doc -> {
-            this.readFile(doc);
-            return this.returnable;
-        }).collect(Collectors.toList());
+            Optional<T> read = this.readFile(doc);
+            return read.get();
+        })
+        .filter(x -> x != null)
+        .collect(Collectors.toList());
     }
 }

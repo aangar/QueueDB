@@ -94,4 +94,18 @@ public class SampleDocumentDAOTest extends BaseTest {
         boolean result = (foundDocs.size() == saved.size()) && (filesInTest.length == saved.size());
         this.logTestResult(result, "test_findAll");
     }
+
+    public void test_FindById_Normal() {
+        DatabaseParser<SampleDocument> db = new DatabaseParser<>(SampleDocument.class, this.TEST_COLLECTION_DIR);
+        SampleDocument d1 = SampleDocument.convertToSampleDoc("ALPINE");
+        SampleDocument d2 = SampleDocument.convertToSampleDoc("BETANINE");
+        db.writeFile(d1);
+        String target = db.writeFile(d2).get().getId();
+        Optional<SampleDocument> result = this.sampDocDAO.findById(target);
+        if (result.isPresent()) {
+            this.logTestResult(result.get().getId().equals(target), "test_FindById_Normal");
+        } else {
+            this.logTestResult(false, "test_FindById_Normal");
+        }
+    }
 }

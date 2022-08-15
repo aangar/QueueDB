@@ -57,7 +57,6 @@ public class BaseTest {
                 new File(this.TEST_COLLECTION_DIR + file).delete();
             }
         }
-        System.out.println("Files found after test: " + existingFiles.length);
     }
 
     /**

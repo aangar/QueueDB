@@ -40,6 +40,17 @@ public class SampleDocumentDAO extends BaseDAO {
         return this.dbParser.findAll();
     }
 
+    public Optional<SampleDocument> findById(String id) {
+        if (id == null || id.isEmpty()) {
+            System.err.println("Id cannot be empty.");
+            return Optional.empty();
+        }
+        return this.dbParser.findAll()
+            .stream()
+            .filter(x -> x.getId().equals(id))
+            .findFirst();
+    }
+
     /**
      * Save one method.
      * 
@@ -52,20 +63,6 @@ public class SampleDocumentDAO extends BaseDAO {
             return Optional.empty();
         }
         return this.dbParser.writeFile(doc);
-    }
-
-    /**
-     * Finds a file by the id.
-     * 
-     * @param fileId the ID of the file.
-     * @return an Optional of the result.
-     */
-    public Optional<SampleDocument> findById(String fileId) {
-        if (fileId == null || fileId.isEmpty()) {
-            System.err.println("FileID cannot be empty.");
-            return Optional.empty();
-        }
-        return this.dbParser.readFile(fileId);
     }
 
     /**
