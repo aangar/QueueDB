@@ -22,7 +22,7 @@ public class DatabaseDocument implements Serializable {
      * Method to generate the UUID of the document.
      */
     public void generateId() {
-        char[] letters = { 'q', 'e', 't', 'u', 'o', 'a' };
+        char[] letters = { 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm' };
         String UUID = "";
         for (int i = 0; i < 4 * 4; i++) {
             if (i % 4 == 0 && i != 0) {

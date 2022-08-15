@@ -50,15 +50,17 @@ public class AutoTestRunner<T> {
         T obj = generateInstance();
         BaseTest bt = new BaseTest();
         Method[] methods = obj.getClass().getDeclaredMethods();
-        for (Method m : methods)
+        for (Method m : methods) {
             try {
                 m.invoke(obj);
                 bt.TEST_COLLECTION_DIR = this.testingPath;
                 bt.clearTestCollection();
             } catch (InvocationTargetException nsm) {
-
+                System.out.println();
+                nsm.printStackTrace();
             } catch (IllegalAccessException iae) {
-
+                System.out.println(iae);
+            }
         }
     }
 
