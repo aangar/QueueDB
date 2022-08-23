@@ -51,6 +51,23 @@ public class SampleDocument extends DatabaseDocument {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Object getProperty(String name) {
+        switch (name) {
+            case "id":
+                return this.getId();
+            case "generationDate":
+                return this.getGenerationDate();
+            case "name":
+                return this.getName();
+            default:
+                System.err.println("Property Name not Recognized. Verify cases in setParsedProperty.");
+        }
+        return null;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

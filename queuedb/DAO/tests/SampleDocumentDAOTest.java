@@ -15,11 +15,13 @@ import queuedb.Objects.SampleDocument;
 
 public class SampleDocumentDAOTest extends BaseTest {
     public final SampleDocumentDAO sampDocDAO;
+    private final DatabaseParser<SampleDocument> queueDB;
 
     public SampleDocumentDAOTest(String dir) {
         this.sampDocDAO = new SampleDocumentDAO(dir);
         this.TEST_COLLECTION_DIR = dir;
         this.TestFileName = "SampleDocumentDAOTest";
+        this.queueDB = new DatabaseParser<>(SampleDocument.class, this.TEST_COLLECTION_DIR);
     }
 
     /**
@@ -74,7 +76,6 @@ public class SampleDocumentDAOTest extends BaseTest {
                 .map(SampleDocument::convertToSampleDoc)
                 .collect(Collectors.toList());
         Queue<SampleDocument> queue = new LinkedList<SampleDocument>(toSaveDocuments);
-        DatabaseParser<SampleDocument> db = new DatabaseParser<>(SampleDocument.class, this.TEST_COLLECTION_DIR);
         List<SampleDocument> saved = new ArrayList<>();
 
         while (queue.size() > 0) {
@@ -82,7 +83,7 @@ public class SampleDocumentDAOTest extends BaseTest {
             if (sampDoc.getId() == null || sampDoc.getId().isEmpty()) {
                 sampDoc.generateId();
             }
-            Optional<SampleDocument> didSave = db.writeFile(sampDoc);
+            Optional<SampleDocument> didSave = this.queueDB.writeFile(sampDoc);
             if (didSave.isPresent()) {
                 saved.add(sampDoc);
             }
@@ -96,16 +97,35 @@ public class SampleDocumentDAOTest extends BaseTest {
     }
 
     public void test_FindById_Normal() {
-        DatabaseParser<SampleDocument> db = new DatabaseParser<>(SampleDocument.class, this.TEST_COLLECTION_DIR);
         SampleDocument d1 = SampleDocument.convertToSampleDoc("ALPINE");
         SampleDocument d2 = SampleDocument.convertToSampleDoc("BETANINE");
-        db.writeFile(d1);
-        String target = db.writeFile(d2).get().getId();
+        this.queueDB.writeFile(d1);
+        String target = this.queueDB.writeFile(d2).get().getId();
         Optional<SampleDocument> result = this.sampDocDAO.findById(target);
         if (result.isPresent()) {
             this.logTestResult(result.get().getId().equals(target), "test_FindById_Normal");
         } else {
             this.logTestResult(false, "test_FindById_Normal");
         }
+    }
+
+    public void test_FindByName() {
+        String docName = "TEST_ALPHARITE";
+        SampleDocument sampleDocument = SampleDocument.convertToSampleDoc(docName);
+        SampleDocument sampDoc2 = SampleDocument.convertToSampleDoc("Other Name");
+        this.queueDB.writeFile(sampleDocument);
+        this.queueDB.writeFile(sampDoc2);
+        List<SampleDocument> found = this.sampDocDAO.findByName(docName);
+        boolean result = found.size() == 1 && found.get(0).getName().equals(docName);
+        this.logTestResult(result, "test_FindByName");
+    }
+
+    public void test_FindByName_NoResults() {
+        SampleDocument sampleDocument = SampleDocument.convertToSampleDoc("something else");
+        SampleDocument sampDoc2 = SampleDocument.convertToSampleDoc("Other Name");
+        this.queueDB.writeFile(sampleDocument);
+        this.queueDB.writeFile(sampDoc2); 
+        List<SampleDocument> found = this.sampDocDAO.findByName("sample name");
+        this.logTestResult(found.isEmpty(), "test_FindByName_NoResults");
     }
 }

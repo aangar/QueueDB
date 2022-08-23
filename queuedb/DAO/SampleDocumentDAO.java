@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.stream.Collectors;
+
 import queuedb.DatabaseParser;
 import queuedb.Objects.SampleDocument;
 
@@ -49,6 +51,17 @@ public class SampleDocumentDAO extends BaseDAO {
             .stream()
             .filter(x -> x.getId().equals(id))
             .findFirst();
+    }
+
+    public List<SampleDocument> findByName(String name) {
+        return this.dbParser.findAll().stream()
+            .filter(doc -> {
+                Optional<String> docName = Optional.ofNullable(doc.getName());
+                if (docName.isPresent()) {
+                    return docName.get().equals(name);
+                }
+                return false;
+            }).collect(Collectors.toList());
     }
 
     /**
