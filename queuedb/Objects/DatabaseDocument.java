@@ -41,4 +41,14 @@ public class DatabaseDocument implements Serializable {
     public void setParsedProperty(String propName, String val) {
         System.err.println("No conversion body was set, please do so.");
     }
+
+    /**
+     * Gets a property from the Name of the property.
+     * @param name the field name.
+     * @return the fields' value.
+     */
+    public Object getProperty(String name) {
+        System.err.println("Override method not configured on target class, returning null.");
+        return null;
+    }
 }
