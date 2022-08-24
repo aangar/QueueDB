@@ -20,7 +20,7 @@ public class Source {
             }
             System.out.println("Attempting to start webserver...");
             try {
-                BasicServer server = new BasicServer(8080);
+                BasicServer server = new BasicServer(8080, DB_DIR_NAME + "/sample-documents/");
                 server.startServer();
             } catch (IOException IOE) {
                 System.out.println(IOE);
