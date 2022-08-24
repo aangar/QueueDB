@@ -1,4 +1,3 @@
-
 QueueDB Progress Map:
 - [x] Making Documents from a Queue.
 - [x] Temporary Database. Will remove older data on new data generation.
@@ -7,22 +6,22 @@ QueueDB Progress Map:
     - [x] Create id field and method.
     - [x] Convert existing classes.
     - [ ] **ONGOING** Implement this with newer classes.
-- [ ] Finding a Better Way to Generate DB Documents.
-    - [ ] Converter Class: will apply to all documents.
+- [x] Finding a Better Way to Generate DB Documents.
+    - [x] Converter Class: will apply to all documents.
 - [ ] Allow a user to generate documents.
     - [x] From a List of Names (Current Setup).
-    - [ ] Allow a user to load a JSON and parse it from there.
+    - [ ] Allow a user to load a JSON and parse it from there. (Experiemental)
+        - [ ] Create an endpoint to accept this JSON.
+        - [ ] Convert JSON to target Objects and save.
 - [ ] Searching this Database.
     - [ ] Finding a match based on a query.
         - [ ] String matching.
         - [ ] GT / LT / EQ / NE, etc...
         - [ ] Multiple Queries.
-    - [ ] Finding all.
-    - [ ] Returning found documents.
-        - [ ] How to convert from JSON to a Object / Class.
-            - [ ] ObjectMapper from Jackson?
+    - [x] Finding all.
+    - [x] Returning found documents.
 - [ ] Efficiency.
-    - [ ] Research Efficient methods and practices to load data.
+    - [x] Research Efficient methods and practices to load data.
     - [ ] Find best ways to secure it and use small amounts of space.
     - [ ] Use little amounts of resources.
 - [ ] DB AppFlow.
@@ -32,5 +31,5 @@ QueueDB Progress Map:
         - [ ] Linux
     - [ ] Termination
         - [ ] Flag / User input?
-        - [ ] Raw kill
+        - [x] Raw kill
             - [ ] Verify File Integrity on startup task.
