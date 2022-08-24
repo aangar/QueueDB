@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.Collectors;
-
 import queuedb.DatabaseParser;
 import queuedb.DAO.PersonDAO;
 import queuedb.Objects.Person;
 
+/**
+ * PersonDAOTest class.
+ */
 public class PersonDAOTest extends BaseTest {
     public final PersonDAO personDAO;
 
@@ -21,6 +23,9 @@ public class PersonDAOTest extends BaseTest {
         this.TestFileName = "PersonDAOTest";
     }
 
+    /**
+     * Tests the save one method.
+     */
     public void test_saveOne() {
         Person person = new Person("GRAPHITE_TESTDOC", 22);
         this.logTestResult(this.personDAO.saveOne(person).isPresent(), "test_saveOne");
@@ -32,7 +37,7 @@ public class PersonDAOTest extends BaseTest {
     public void test_saveOne_null() {
         this.logTestResult(this.personDAO.saveOne(null).isEmpty(), "test_saveOne_null");
     }
-
+    /**Tests the save method for multiple documents. */
     public void test_SaveMulti() {
         List<Person> docs = List.of("Riley", "Alpine", "Tetca", "Doyin", "Trilek")
                 .stream()
@@ -54,7 +59,8 @@ public class PersonDAOTest extends BaseTest {
     public void test_SaveMulti_Null() {
         this.logTestResult(this.personDAO.savePersons(null).size() < 1, "test_SaveMulti_Null");
     }
-
+    
+    /** Tests the findAll method. */
     public void test_findAll() {
         List<Person> docs = List.of("Riley", "Alpine", "Tetca", "Doyin", "Trilek")
                 .stream()

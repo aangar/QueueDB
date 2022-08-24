@@ -11,20 +11,36 @@ public class SampleDocument extends DatabaseDocument {
     private String name;
     private Instant generationDate;
 
+    /**
+     * Default Constructor
+     */
     public SampleDocument() {
         generateId();
     }
 
+    /**
+     * Constructor with name and generation date.
+     * @param name String, name.
+     * @param genDate Instant, Generation Date.
+     */
     public SampleDocument(String name, Instant genDate) {
         generateId();
         this.name = name;
         this.generationDate = genDate;
     }
 
+    /**
+     * Getter for the name.
+     * @return String, name.
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Getter for the generation date.
+     * @return Instant, the generation date.
+     */
     public Instant getGenerationDate() {
         return this.generationDate;
     }
@@ -68,10 +84,18 @@ public class SampleDocument extends DatabaseDocument {
         return null;
     }
 
+    /**
+     * Name Setter
+     * @param name String, name.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Generation Setter.
+     * @param genDate String, generationDate.
+     */
     public void setGenerationDate(String genDate) {
         this.generationDate = Instant.parse(genDate);
     }

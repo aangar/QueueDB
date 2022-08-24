@@ -1,35 +1,55 @@
 package queuedb.Objects;
 
+/**
+ * The Person Class.
+ */
 public class Person extends DatabaseDocument {
     private String name;
     private int age;
 
+    /**
+     * Default Constructor.
+     */
     public Person() {
         generateId();
     }
 
+    /**{@inheritDoc}} */
     public Person(String name, int age) {
         generateId();
         this.name = name;
         this.age = age;
     }
-
+    /**
+     * setter
+     * @param name name
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    /**
+     * setter
+     * @param age age
+     */
     public void setAge(int age) {
         this.age = age;
     }
-
+    /**
+     * getter
+     * @return name
+     */
     public String getName() {
         return this.name;
     }
-
+    /**
+     * getter
+     * @return age
+     */
     public int getAge() {
         return this.age;
     }
-
+    
+    /**{@inheritDoc}} */
     public void setParsedProperty(String property, String val) {
         switch (property) {
             case "id": {

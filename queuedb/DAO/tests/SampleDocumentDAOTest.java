@@ -69,6 +69,9 @@ public class SampleDocumentDAOTest extends BaseTest {
         this.logTestResult(this.sampDocDAO.saveOne(null).isEmpty(), "test_saveOne_null");
     }
 
+    /**
+     * Tests the findAll method.
+     */
     public void test_findAll() {
         List<SampleDocument> toSaveDocuments = List
                 .of("ALPINE_TESTDOC", "BRECA_TESTDOC", "CACHE_TESTDOC", "DESPIAN_TESTDOC")
@@ -96,6 +99,7 @@ public class SampleDocumentDAOTest extends BaseTest {
         this.logTestResult(result, "test_findAll");
     }
 
+    /**Tests the findById method normally. */
     public void test_FindById_Normal() {
         SampleDocument d1 = SampleDocument.convertToSampleDoc("ALPINE");
         SampleDocument d2 = SampleDocument.convertToSampleDoc("BETANINE");
@@ -109,6 +113,7 @@ public class SampleDocumentDAOTest extends BaseTest {
         }
     }
 
+    /**Tests the findByName method */
     public void test_FindByName() {
         String docName = "TEST_ALPHARITE";
         SampleDocument sampleDocument = SampleDocument.convertToSampleDoc(docName);
@@ -120,6 +125,7 @@ public class SampleDocumentDAOTest extends BaseTest {
         this.logTestResult(result, "test_FindByName");
     }
 
+    /**Tests the findByName method with no results, but containing other documents. */
     public void test_FindByName_NoResults() {
         SampleDocument sampleDocument = SampleDocument.convertToSampleDoc("something else");
         SampleDocument sampDoc2 = SampleDocument.convertToSampleDoc("Other Name");

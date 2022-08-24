@@ -8,11 +8,17 @@ import java.lang.reflect.Method;
  * <h3>Automatic Test Runner Class.</h3>
  * <br>
  * </br>
- * 
- * This is a class for an Automatic Test Runner. This will perform tests from a
- * test class, and run them accordingly. All classes must be public and void,
- * following the logging and cleanup conventions.
- * 
+ * This class automatically runs tests marked in the QueueDBTest.java file.
+ * Each DAO Test class contains a method called <code>runTests()</code>, which will
+ * load and run all written tests <b>if configured properly</b>.
+ * <br></br>
+ * <b><i>Requirements:</i></b>
+ * <ul>
+ * <li>Method is void</li>
+ * <li><code>this.logTestResult</code> is called. This will not break the test, but
+ * the tests' status will remain unknown.</li>
+ * </ul>
+ * <br></br>
  * @author aangar, 2022.
  */
 public class AutoTestRunner<T> {

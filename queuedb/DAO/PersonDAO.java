@@ -21,10 +21,19 @@ public class PersonDAO extends BaseDAO {
         this.dbParser = new DatabaseParser<Person>(Person.class, this.DIR_TO_COLLECTION);
     }
 
+    /**
+     * FindAll method
+     * @return a list of all the documents.
+     */
     public List<Person> findAll() {
         return this.dbParser.findAll();
     }
 
+    /**
+     * save one method
+     * @param doc Person to save.
+     * @return the saved result.
+     */
     public Optional<Person> saveOne(Person doc) {
         if (doc == null) {
             System.err.println("Person cannot be null for saveOne!");
@@ -33,6 +42,11 @@ public class PersonDAO extends BaseDAO {
         return this.dbParser.writeFile(doc);
     }
 
+    /**
+     * saves a list of persons.
+     * @param docs list of persons to save.
+     * @return the saved documents.
+     */
     public List<Person> savePersons(List<Person> docs) {
         if (docs == null || docs.isEmpty()) {
             System.err.println("List of Persons cannot be empty for savePersons!");

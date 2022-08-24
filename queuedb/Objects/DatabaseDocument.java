@@ -37,7 +37,17 @@ public class DatabaseDocument implements Serializable {
         }
         this.id = UUID;
     }
-
+    /**
+     * For use with the old method of reading the database files.
+     * Converting from JSON to a class using <b>Reflection</b>, the property was read as a string,
+     * then passed to this method with its' value and then set in the reflected object. At the moment
+     * this is deprecated and no longer used, but could be used for a file formatting change down the road.
+     * @author aangar
+     * @deprecated since QueueDB_DynamicWriting to leverage <b>ObjectInputStream</b> in the read method.
+     * @param propName the String value of the property name to be set during the read process, 
+     * used in a switch case to determine the according setter to be called.
+     * @param val the String value read from the JSON document, passed to the according setter method.
+     */
     public void setParsedProperty(String propName, String val) {
         System.err.println("No conversion body was set, please do so.");
     }
