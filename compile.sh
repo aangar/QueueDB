@@ -40,6 +40,7 @@ delete_java_classes() {
 compile_java_files queuedb/DAO
 compile_java_files queuedb/Objects
 compile_java_files queuedb
+compile_java_files server
 
 
 cd "$BASE_DIR"
@@ -50,3 +51,4 @@ delete_java_classes queuedb/DAO
 delete_java_classes queuedb/DAO/tests
 delete_java_classes queuedb/Objects
 delete_java_classes queuedb
+delete_java_classes server
