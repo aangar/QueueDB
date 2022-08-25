@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.sun.net.httpserver.HttpServer;
 
 import queuedb.DAO.SampleDocumentDAO;
+import queuedb.Objects.DatabaseDocument;
 import queuedb.Objects.SampleDocument;
 
 import com.sun.net.httpserver.HttpHandler;
@@ -33,11 +34,10 @@ public class BasicServer{
             SampleDocument doc = SampleDocument.convertToSampleDoc("TETRA_BETA_DOPAMINE");
             Optional<SampleDocument> saved = this.sampDocDAO.saveOne(doc);
             if (saved.isPresent()) {
-                ObjectToJSON<SampleDocument> converter = new ObjectToJSON<>(SampleDocument.class);
-                converter.convert();
+                ObjectToJSON<SampleDocument> converter = new ObjectToJSON<>();
+                String result = converter.convert(saved.get());
             }
-            String response = saved.get().toString();
-            t.setAttribute("doof", "boof");
+            String response = "boofus doofus youve been snoofues";
             t.sendResponseHeaders(200, response.getBytes().length);
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
@@ -47,32 +47,25 @@ public class BasicServer{
         server.start();
     }
 
-    private class ObjectToJSON<T> {
-        private String clazz;
+    public class ObjectToJSON<T> {
+        public ObjectToJSON() { }
 
-        public ObjectToJSON(Class<T> cn) {
-            this.clazz = cn.getName();
-        }
-        private void convert() {
-            System.out.println(this.clazz);
+        public String convert(T responseDocument) {
             try {
-                Class<?> instance = Class.forName(this.clazz);
-                Method[] methods = instance.getClass().getDeclaredMethods();
-                List<Method> getters = List.of(methods).stream().filter(x -> x.getName().contains("get")).collect(Collectors.toList());
-                Constructor<?> consts[] = instance.getDeclaredConstructors();
-                T invokeable = (T) consts[0].newInstance();
-                for (Method m : getters) {
-                    System.out.println(m.invoke(invokeable));
+                List<Method> methods = List.of(responseDocument.getClass().getMethods())
+                    .stream()
+                    .filter(x -> x.getName().contains("get") && !x.getName().contains("getClass"))
+                    .collect(Collectors.toList());
+                for (Method method : methods) {
+                    System.out.println(method.invoke(responseDocument));
                 }
-            } catch (ClassNotFoundException CNFE) {
-                CNFE.printStackTrace();
-            } catch (InstantiationException IE) {
-                IE.printStackTrace();
+                
             } catch (IllegalAccessException IAE) {
                 IAE.printStackTrace();
             } catch (InvocationTargetException ITE) {
                 ITE.printStackTrace();
             }
+            return "alinine";
         }
     }
 }
